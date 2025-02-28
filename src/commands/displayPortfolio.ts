@@ -1,6 +1,6 @@
 import { table } from 'table';
 import {
-    getPortfolioSummary
+    getPortfolio
 } from '../services/portfolioService.js';
 
 import {
@@ -14,7 +14,7 @@ import { Logger } from '../utils/logger.js';
  */
 export async function displayPortfolio(): Promise<void> {
     try {
-        const portfolio = await getPortfolioSummary();
+        const portfolio = await getPortfolio();
 
         if (portfolio.assets.length === 0) {
             Logger.warn('Portfolio is empty. Add some assets first.');

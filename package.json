@@ -12,7 +12,8 @@
     "start": "node dist/index.js",
     "dev": "ts-node src/index.ts",
     "test": "jest",
-    "lint": "eslint . --ext .ts"
+    "lint": "eslint . --ext .ts",
+    "r": "npm run build && fit --dev-data --debug"
   },
   "keywords": [
     "portfolio",

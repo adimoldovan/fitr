@@ -1,20 +1,33 @@
 import fs from 'fs/promises';
+import { existsSync } from 'fs';
 import path from 'path';
 import { Transaction } from '../types.js';
 import { getDataDir } from '../utils/storageUtils.js';
+import { Logger } from "../utils/logger.js";
 
-function getTransactionsPath(symbol: string): string {
-    return path.resolve(getDataDir(), 'transactions', `${symbol}.json`);
+async function getTransactionsPath(symbol: string): Promise<string> {
+    const dir = path.resolve(getDataDir(), 'transactions');
+    if (!existsSync(dir)) {
+        Logger.debug(`Transactions dir not found. Creating ${dir}`);
+        await fs.mkdir(dir, { recursive: true });
+    }
+    return path.resolve(dir, `${symbol}.json`);
 }
 
 export async function getTransactions(symbol: string): Promise<Transaction[]> {
     try {
-        const transactionsPath = getTransactionsPath(symbol);
-        const data = await fs.readFile(transactionsPath, 'utf-8');
+        const filePath = await getTransactionsPath(symbol);
+        if (!existsSync(filePath)) {
+            Logger.debug(`Transactions file for ${ symbol } not found. Creating ${filePath}`);
+            await fs.writeFile(filePath, JSON.stringify({ symbol, transactions: [] }, null, 2));
+            return [];
+        }
+
+        const data = await fs.readFile(filePath, 'utf-8');
         const { transactions } = JSON.parse(data);
         return transactions;
     } catch (error) {
-        console.error(`Error reading transactions for ${symbol}:`, error);
-        throw new Error(`Failed to read transactions for ${symbol}: ${error instanceof Error ? error.message : String(error)}`);
+        Logger.error(`Error reading transactions for ${symbol}`, error);
+        return [];
     }
 }

@@ -21,19 +21,13 @@ export enum AssetType {
     OTHER = 'other'
 }
 
-export interface PortfolioSummary {
+export interface Portfolio {
     assets: Asset[];
     cost: number;
     value: number;
     profit: number;
     profitPercentage: number;
     lastUpdated: string;
-}
-
-export interface AssetDetail {
-    asset: Asset;
-    transactions: Transaction[];
-    priceHistory: PricePoint[];
 }
 
 export interface Transaction {
@@ -60,6 +54,5 @@ export interface PricePoint {
 
 export enum PriceSource {
     YAHOO = 'yahoo',
-    MANUAL = 'manual',
-    CALCULATED = 'calculated'
+    MANUAL = 'manual'
 }

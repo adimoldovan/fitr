@@ -1,5 +1,5 @@
 import { format } from 'date-fns';
-import { getPortfolioSummary, updatePortfolio } from '../services/portfolioService.js';
+import { getPortfolio, updatePortfolio } from '../services/portfolioService.js';
 import { getTransactions } from '../services/transactionService.js';
 import { savePriceHistory, getPriceHistory } from '../services/priceHistoryService.js';
 import {
@@ -69,7 +69,7 @@ export async function updateData(): Promise<void> {
     Logger.start('Updating portfolio data');
 
     try {
-        const portfolio = await getPortfolioSummary();
+        const portfolio = await getPortfolio();
 
         if (portfolio.assets.length === 0) {
             Logger.warn('Portfolio is empty. Add some assets first?');

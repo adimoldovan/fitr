@@ -22,7 +22,7 @@ export class Logger {
 		return ' '.repeat(this.taskLevel * this.INDENT_SIZE);
 	}
 
-	static error(message: string, err: unknown) {
+	static error(message: string, err: unknown, exit = true) {
 		if (this.loggingLevel >= LOGGING_LEVELS.error) {
 			console.error(`${this.getCurrentIndent()}${chalk.red('✖')} ${chalk.red(message)}`);
 			if (err instanceof Error) {
@@ -31,6 +31,10 @@ export class Logger {
 			} else if (err) {
 				console.error(`${this.getCurrentIndent()}  ${chalk.red(String(err))}`);
 			}
+		}
+
+		if (exit) {
+			process.exit(1);
 		}
 	}
 

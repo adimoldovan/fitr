@@ -1,6 +1,6 @@
 import fs from 'fs/promises';
 import path from 'path';
-import { PortfolioSummary, PricePoint } from '../types.js';
+import { Portfolio, PricePoint } from '../types.js';
 import { getDataDir } from '../utils/storageUtils.js';
 import { getTransactions } from './transactionService.js';
 import { getPriceHistory } from './priceHistoryService.js';
@@ -11,17 +11,17 @@ function getPortfolioPath(): string {
     return path.resolve(getDataDir('portfolioService'), 'portfolio.json');
 }
 
-export async function getPortfolioSummary(): Promise<PortfolioSummary> {
+export async function getPortfolio(): Promise<Portfolio> {
     try {
         const data = await fs.readFile(getPortfolioPath(), 'utf-8');
-        return JSON.parse(data) as PortfolioSummary;
+        return JSON.parse(data) as Portfolio;
     } catch (error) {
         Logger.error('Error reading portfolio summary', error);
         process.exit(1);
     }
 }
 
-export async function updatePortfolioSummary(portfolio: PortfolioSummary): Promise<void> {
+export async function savePortfolio(portfolio: Portfolio): Promise<void> {
     try {
         await fs.writeFile(getPortfolioPath(), JSON.stringify(portfolio, null, 2));
     } catch (error) {
@@ -32,7 +32,7 @@ export async function updatePortfolioSummary(portfolio: PortfolioSummary): Promi
 
 export async function updatePortfolio(): Promise<void> {
     try {
-        const portfolio = await getPortfolioSummary();
+        const portfolio = await getPortfolio();
 
         for (const asset of portfolio.assets) {
             try {
@@ -61,7 +61,7 @@ export async function updatePortfolio(): Promise<void> {
                     )[0];
 
                 // Update asset position
-                asset.lastPrice = latestPrice.price;
+                asset.lastPrice = latestPrice?.price || 0;
                 asset.quantity = totalQuantity;
                 asset.totalCost = totalCost;
                 asset.avgCost = avgCost;
@@ -91,7 +91,7 @@ export async function updatePortfolio(): Promise<void> {
         portfolio.profit = portfolio.value - portfolio.cost;
         portfolio.profitPercentage = portfolio.cost > 0 ? (portfolio.profit / portfolio.cost) * 100 : 0;
 
-        await updatePortfolioSummary(portfolio);
+        await savePortfolio(portfolio);
 
         Logger.info(
             `Updated portfolio:\n\t` +
