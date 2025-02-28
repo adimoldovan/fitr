@@ -29,7 +29,6 @@
     "commander": "^11.1.0",
     "date-fns": "^2.30.0",
     "node-fetch": "^3.3.2",
-    "ora": "^8.2.0",
     "table": "^6.8.1",
     "yahoo-finance2": "^2.13.3"
   },

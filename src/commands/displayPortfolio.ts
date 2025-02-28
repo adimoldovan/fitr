@@ -21,39 +21,35 @@ export async function displayPortfolio(): Promise<void> {
             return;
         }
 
-        const summaryTableData = [
-            ['Currency', 'Value', 'Cost', 'P&L']
-        ]
+        const summaryTableData = []
 
         for (const currency of ( portfolio.currencies || [] ) ) {
-            summaryTableData.push([
-                currency.currency,
-                formatNumber(currency.value),
-                formatNumber(currency.cost),
-                `${getColoredFormatedNumber(currency.profit)}    ${getColoredFormatedNumber(currency.profitPercentage, '%')}`
-            ])
+            summaryTableData.push({
+                'Currency': currency.currency,
+                'Value': formatNumber(currency.value),
+                'Cost': formatNumber(currency.cost),
+                'P&L':`${getColoredFormatedNumber(currency.profit)}    ${getColoredFormatedNumber(currency.profitPercentage, '%')}`
+        })
         }
 
-        console.log(table(summaryTableData));
+        Logger.printTable(summaryTableData);
 
-        const tableData = [
-            ['Symbol', 'Name', 'Currency', 'Quantity', 'Avg Cost', 'Current Price', 'Value', 'P&L']
-        ];
+        const tableData = [];
 
         for (const asset of portfolio.assets) {
-            tableData.push([
-                asset.symbol,
-                asset.name,
-                asset.currency,
-                formatNumber(asset.quantity, 4),
-                formatNumber(asset.avgCost),
-                formatNumber(asset.lastPrice),
-                formatNumber(asset.currentValue),
-                `${getColoredFormatedNumber(asset.profit)}    ${getColoredFormatedNumber(asset.profitPercentage, '%')}`,
-            ]);
+            tableData.push({
+                'Symbol': asset.symbol,
+                'Name': asset.name,
+                'Currency': asset.currency,
+                'Quantity': formatNumber(asset.quantity, 4),
+                'Avg Cost': formatNumber(asset.avgCost),
+                'Current Price': formatNumber(asset.lastPrice),
+                'Value': formatNumber(asset.currentValue),
+                'P&L': `${getColoredFormatedNumber(asset.profit)}    ${getColoredFormatedNumber(asset.profitPercentage, '%')}`,
+            });
         }
 
-        console.log(table(tableData));
+        Logger.printTable(tableData);
 
     } catch (error) {
         Logger.error('', error);

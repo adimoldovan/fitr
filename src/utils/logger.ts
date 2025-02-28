@@ -67,4 +67,36 @@ export class Logger {
 			console.log(`${this.getCurrentIndent()}${chalk.green('✓')} Complete`);
 		}
 	}
+
+	static printTable(data: Record<string, any>[]) {
+		console.log('\n');
+		// Calculate column widths
+		const columnWidths: Record<string, number> = {};
+		const columns = Object.keys(data[0]);
+
+		// First, determine max width for each column
+		columns.forEach(col => {
+			columnWidths[col] = Math.max(
+				col.length,
+				...data.map(row => String(row[col]).length)
+			);
+		});
+
+		// Print header
+		let headerLine = columns.map(col =>
+			col.padEnd(columnWidths[col], ' ')
+		).join(' | ');
+		console.log(headerLine);
+		console.log('-'.repeat(headerLine.length));
+
+		// Print rows
+		data.forEach(row => {
+			let line = columns.map(col =>
+				String(row[col]).padEnd(columnWidths[col], ' ')
+			).join(' | ');
+			console.log(line);
+		});
+
+		console.log('\n');
+	}
 }
