@@ -79,7 +79,7 @@ export async function updatePortfolio(): Promise<void> {
             }
         }
 
-        const currencies = portfolio.assets.map(asset => asset.currency);
+        const currencies = [...new Set(portfolio.assets.map(asset => asset.currency))];
 
         for (const currency of currencies) {
             const assets = portfolio.assets.filter(asset => asset.currency === currency);
