@@ -22,14 +22,17 @@ export async function displayPortfolio(): Promise<void> {
         }
 
         const summaryTableData = [
-            ['Value', 'Cost', 'P&L']
+            ['Currency', 'Value', 'Cost', 'P&L']
         ]
 
-        summaryTableData.push([
-            formatNumber(portfolio.value),
-            formatNumber(portfolio.cost),
-            `${getColoredFormatedNumber(portfolio.profit)}    ${getColoredFormatedNumber(portfolio.profitPercentage, '%')}`
-        ])
+        for (const currency of ( portfolio.currencies || [] ) ) {
+            summaryTableData.push([
+                currency.currency,
+                formatNumber(currency.value),
+                formatNumber(currency.cost),
+                `${getColoredFormatedNumber(currency.profit)}    ${getColoredFormatedNumber(currency.profitPercentage, '%')}`
+            ])
+        }
 
         console.log(table(summaryTableData));
 

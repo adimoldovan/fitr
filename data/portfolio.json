@@ -18,7 +18,7 @@
       "symbol": "GOOGL",
       "name": "Alphabet Inc.",
       "type": "stock",
-      "currency": "USD",
+      "currency": "EUR",
       "quantity": 3,
       "avgCost": 137.13,
       "lastUpdated": "2025-02-27",
@@ -29,10 +29,22 @@
       "profitPercentage": 25.96076715525413
     }
   ],
-  "totalValue": 1652.5,
-  "lastUpdated": "2025-02-27",
-  "value": 1317.65,
-  "cost": 1242.3899999999999,
-  "profit": 75.26000000000022,
-  "profitPercentage": 6.057679150669292
+  "currencies": [
+    {
+      "cost": 831,
+      "value": 799.46,
+      "profit": -31.539999999999964,
+      "profitPercentage": -3.7954271961492134,
+      "lastUpdated": "2025-02-28T12:44:08.017Z",
+      "currency": "USD"
+    },
+    {
+      "cost": 411.39,
+      "value": 518.1899999999999,
+      "profit": 106.79999999999995,
+      "profitPercentage": 25.96076715525413,
+      "lastUpdated": "2025-02-28T12:44:08.017Z",
+      "currency": "EUR"
+    }
+  ]
 }

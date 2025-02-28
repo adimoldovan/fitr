@@ -21,13 +21,18 @@ export enum AssetType {
     OTHER = 'other'
 }
 
-export interface Portfolio {
-    assets: Asset[];
+export interface CurrencyPortfolio {
+    currency: string;
     cost: number;
     value: number;
     profit: number;
     profitPercentage: number;
     lastUpdated: string;
+}
+
+export interface Portfolio {
+    assets: Asset[];
+    currencies: CurrencyPortfolio[];
 }
 
 export interface Transaction {

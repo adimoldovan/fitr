@@ -79,25 +79,40 @@ export async function updatePortfolio(): Promise<void> {
             }
         }
 
-        portfolio.value = portfolio.assets.reduce(
-            (total, asset) => total + asset.currentValue,
-            0
-        );
-        portfolio.cost = portfolio.assets.reduce(
-            (total, asset) => total + asset.totalCost,
-            0
-        );
+        const currencies = portfolio.assets.map(asset => asset.currency);
 
-        portfolio.profit = portfolio.value - portfolio.cost;
-        portfolio.profitPercentage = portfolio.cost > 0 ? (portfolio.profit / portfolio.cost) * 100 : 0;
+        for (const currency of currencies) {
+            const assets = portfolio.assets.filter(asset => asset.currency === currency);
+            const value = assets.reduce((total, asset) => total + asset.currentValue, 0);
+            const cost = assets.reduce((total, asset) => total + asset.totalCost, 0);
+
+            const currencyPortfolio = {
+                cost,
+                value,
+                profit: value - cost,
+                profitPercentage: cost > 0 ? ((value - cost) / cost) * 100 : 0,
+                lastUpdated: new Date().toISOString()
+            };
+
+            portfolio.currencies = portfolio.currencies || [];
+            const existingCurrencyPortfolio = portfolio.currencies.find(c => c.currency.toUpperCase() === currency.toUpperCase());
+
+            if (existingCurrencyPortfolio) {
+                Object.assign(existingCurrencyPortfolio, currencyPortfolio);
+            } else {
+                portfolio.currencies.push({
+                    ...currencyPortfolio,
+                    currency
+                });
+            }
+
+            Logger.info(
+                `Updated ${ currency } portfolio: value ${formatNumber(currencyPortfolio.value)}`
+            );
+
+        }
 
         await savePortfolio(portfolio);
-
-        Logger.info(
-            `Updated portfolio:\n\t` +
-            `value: ${formatNumber(portfolio.value)} ` +
-            `p&l: ${formatNumber(portfolio.profit)} (${portfolio.profitPercentage.toFixed(2)}%)`
-        );
 
     } catch (error) {
         Logger.error('Error updating portfolio performance', error);
