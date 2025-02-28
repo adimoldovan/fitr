@@ -3,6 +3,7 @@ export interface Asset {
     type: AssetType;
     currency: string;
     symbol: string;
+    isin: string;
     quantity: number;
     avgCost: number;
     lastPrice: number;

@@ -2,6 +2,7 @@
   "assets": [
     {
       "symbol": "MSFT",
+      "isin": "",
       "name": "Microsoft Corporation",
       "type": "stock",
       "currency": "USD",
@@ -16,6 +17,7 @@
     },
     {
       "symbol": "GOOGL",
+      "isin": "",
       "name": "Alphabet Inc.",
       "type": "stock",
       "currency": "EUR",

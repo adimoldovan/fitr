@@ -1,4 +1,3 @@
-import { table } from 'table';
 import {
     getPortfolio
 } from '../services/portfolioService.js';
@@ -40,11 +39,13 @@ export async function displayPortfolio(): Promise<void> {
             tableData.push({
                 'Symbol': asset.symbol,
                 'Name': asset.name,
-                'Currency': asset.currency,
+                'ISIN': asset.isin,
+                'Value': formatNumber(asset.currentValue),
                 'Quantity': formatNumber(asset.quantity, 4),
                 'Avg Cost': formatNumber(asset.avgCost),
                 'Current Price': formatNumber(asset.lastPrice),
-                'Value': formatNumber(asset.currentValue),
+                'Currency': asset.currency,
+                'Updated': asset.lastUpdated,
                 'P&L': `${getColoredFormatedNumber(asset.profit)}\t${getColoredFormatedNumber(asset.profitPercentage, '%')}`,
             });
         }

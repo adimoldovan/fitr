@@ -68,7 +68,7 @@ export class Logger {
 		}
 	}
 
-	static printTable(data: Record<string, any>[]) {
+	static printTable(data: Record<string, string>[]) {
 		console.log('\n');
 		// Calculate column widths
 		const columnWidths: Record<string, number> = {};
@@ -83,7 +83,7 @@ export class Logger {
 		});
 
 		// Print header
-		let headerLine = columns.map(col =>
+		const headerLine = columns.map(col =>
 			col.padEnd(columnWidths[col], ' ')
 		).join(' | ');
 		console.log(headerLine);
@@ -91,7 +91,7 @@ export class Logger {
 
 		// Print rows
 		data.forEach(row => {
-			let line = columns.map(col =>
+			const line = columns.map(col =>
 				String(row[col]).padEnd(columnWidths[col], ' ')
 			).join(' | ');
 			console.log(line);

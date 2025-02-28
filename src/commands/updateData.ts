@@ -1,14 +1,14 @@
-import { format } from 'date-fns';
-import { getPortfolio, updatePortfolio } from '../services/portfolioService.js';
-import { getTransactions } from '../services/transactionService.js';
-import { savePriceHistory, getPriceHistory } from '../services/priceHistoryService.js';
+import {format} from 'date-fns';
+import {getPortfolio, updatePortfolio} from '../services/portfolioService.js';
+import {getTransactions} from '../services/transactionService.js';
+import {savePriceHistory, getPriceHistory} from '../services/priceHistoryService.js';
 import {
     getHistoricalPrices,
     getWeeklyPricesSinceLastUpdate
 } from '../services/yahooFinance.js';
-import { formatDate } from '../utils/dateUtils.js';
-import { PricePoint, Transaction } from "../types";
-import { Logger } from '../utils/logger.js';
+import {formatDate} from '../utils/dateUtils.js';
+import {Transaction} from "../types";
+import {Logger} from '../utils/logger.js';
 
 async function updateHistoricalPricesDataForSymbol(symbol: string): Promise<void> {
     Logger.start(`Updating historical data for ${symbol}...`);

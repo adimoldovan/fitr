@@ -8,12 +8,6 @@ export function formatNumber(value: number, decimals: number = 2): string {
     }).format(value);
 }
 
-export function formatCurrency(value: number): string {
-    return new Intl.NumberFormat('en-US', {
-        style: 'currency',
-    }).format(value);
-}
-
 /**
  * Format a color based on whether a value is positive or negative
  */
