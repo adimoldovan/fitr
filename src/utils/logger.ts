@@ -68,7 +68,7 @@ export class Logger {
 		}
 	}
 
-	static printTable(data: Record<string, string>[], withHeader = true) {
+	static printTable(data: Record<string, string>[], withHeader: boolean, title: string) {
 		console.log();
 		// Calculate column widths
 		const columnWidths: Record<string, number> = {};
@@ -81,6 +81,8 @@ export class Logger {
 				...data.map(row => String(row[col]).length)
 			);
 		});
+
+		console.log(chalk.underline(title));
 
 		// Print header
 		if(withHeader) {

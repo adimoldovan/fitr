@@ -13,7 +13,7 @@
     "dev": "ts-node src/index.ts",
     "test": "jest",
     "lint": "eslint .",
-    "r": "npm run build && fit --dev-data --debug --currency eur,usd,ron"
+    "r": "npm run build && fit --dev-data --debug --convert"
   },
   "keywords": [
     "portfolio",
