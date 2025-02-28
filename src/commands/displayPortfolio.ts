@@ -2,16 +2,19 @@ import {
     getPortfolio
 } from '../services/portfolioService.js';
 
+import {getCurrencyExchangeRate} from '../services/currencyService.js';
+
 import {
     formatNumber,
     getColoredFormatedNumber,
 } from '../utils/formatUtils.js';
-import { Logger } from '../utils/logger.js';
+
+import {Logger} from '../utils/logger.js';
 
 /**
  * Display the current portfolio with latest prices
  */
-export async function displayPortfolio(): Promise<void> {
+export async function displayPortfolio(withTotalInCurrencies?: string): Promise<void> {
     try {
         const portfolio = await getPortfolio();
 
@@ -20,15 +23,39 @@ export async function displayPortfolio(): Promise<void> {
             return;
         }
 
+
+        if (withTotalInCurrencies) {
+            const displayCurrencies = withTotalInCurrencies.split(',');
+            Logger.debug(`Calculating total portfolio in ${withTotalInCurrencies}`);
+
+            const valueInCurrenciesDataTable = [];
+            for (const displayCurrency of displayCurrencies) {
+                let valueInCurrency: number = 0;
+                for (const c of (portfolio.currencies || [])) {
+                    if (c.currency.toUpperCase() === displayCurrency.toUpperCase()) {
+                        valueInCurrency += c.value;
+                    } else {
+                        const exchangeRate = await getCurrencyExchangeRate(c.currency, displayCurrency);
+                        valueInCurrency += c.value * exchangeRate;
+                    }
+                }
+                valueInCurrenciesDataTable.push({
+                    'TOTAL': `${displayCurrency.toUpperCase()}\t${formatNumber(valueInCurrency)}`
+                });
+            }
+
+            Logger.printTable(valueInCurrenciesDataTable);
+        }
+
         const summaryTableData = []
 
-        for (const currency of ( portfolio.currencies || [] ) ) {
+        for (const currency of (portfolio.currencies || [])) {
             summaryTableData.push({
                 'Currency': currency.currency,
                 'Value': formatNumber(currency.value),
                 'Cost': formatNumber(currency.cost),
-                'P&L':`${getColoredFormatedNumber(currency.profit)}\t${getColoredFormatedNumber(currency.profitPercentage, '%')}`
-        })
+                'P&L': `${getColoredFormatedNumber(currency.profit)}\t${getColoredFormatedNumber(currency.profitPercentage, '%')}`
+            })
         }
 
         Logger.printTable(summaryTableData);

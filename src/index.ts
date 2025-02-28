@@ -11,30 +11,34 @@ const program = new Command();
 program
     .name('fi-tracker')
     .description('A CLI tool for tracking investment portfolio performance')
-    .version('1.0.0');
+    .version('0.1.0');
 
 program
-    .option('--offline', 'Display portfolio data without fetching current prices')
-    .option('--update', 'Update historical price data for all assets in the portfolio')
+    .option('--sync', 'Fetches and updates historical price data for all assets and calculates portfolio performance')
     .option('--debug', 'Use development data directory')
     .option('--dev-data', 'Use development data directory')
+    .option('--currency <currency>', 'Display total portfolio value in the specified currency')
+    .helpOption('--help, -h', 'Display help information')
     .action(async (options) => {
         Config.getInstance().setDevMode(!!options.devData);
         Config.getInstance().setDebugMode(!!options.debug);
+
+        if (options.debug) {
+            Logger.debug(`Options: ${JSON.stringify(options)}`);
+        }
 
         Logger.info(`Running in ${Config.getInstance().isDevMode() ? 'development' : 'production'} data mode`);
 
         await initializeStorage();
 
         try {
-            if (options.update) {
+            if (options.sync) {
                 await updateData();
             }
 
-            await displayPortfolio();
+            await displayPortfolio(options.currency);
         } catch (error) {
             Logger.error('', error);
-            process.exit(1);
         }
     });
 

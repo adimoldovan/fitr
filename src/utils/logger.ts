@@ -68,8 +68,8 @@ export class Logger {
 		}
 	}
 
-	static printTable(data: Record<string, string>[]) {
-		console.log('\n');
+	static printTable(data: Record<string, string>[], withHeader = true) {
+		console.log();
 		// Calculate column widths
 		const columnWidths: Record<string, number> = {};
 		const columns = Object.keys(data[0]);
@@ -83,11 +83,13 @@ export class Logger {
 		});
 
 		// Print header
-		const headerLine = columns.map(col =>
-			col.padEnd(columnWidths[col], ' ')
-		).join(' | ');
-		console.log(headerLine);
-		console.log('-'.repeat(headerLine.length));
+		if(withHeader) {
+			const headerLine = columns.map(col =>
+				col.padEnd(columnWidths[col], ' ')
+			).join(' | ');
+			console.log(headerLine);
+			console.log('-'.repeat(headerLine.length));
+		}
 
 		// Print rows
 		data.forEach(row => {
@@ -96,7 +98,6 @@ export class Logger {
 			).join(' | ');
 			console.log(line);
 		});
-
-		console.log('\n');
+		console.log();
 	}
 }

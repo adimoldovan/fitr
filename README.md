@@ -1,4 +1,4 @@
-# Portfolio Tracker CLI
+# Investment Portfolio Tracker
 
 A command-line tool for tracking your investment portfolio built with TypeScript and Node.js.
 
@@ -9,81 +9,37 @@ A command-line tool for tracking your investment portfolio built with TypeScript
 - Store historical price data for each asset
 - Calculate performance metrics (gain/loss, percentage changes)
 - View your portfolio online or offline
-- Update historical price data with weekly intervals
 
 ## Installation
 
-1. Clone this repository:
-   ```bash
-   git clone https://github.com/yourusername/portfolio-tracker.git
-   cd portfolio-tracker
-   ```
-
-2. Install dependencies:
-   ```bash
+```bash
    npm install
-   ```
-
-3. Build the project:
-   ```bash
    npm run build
-   ```
-
-4. Link the CLI tool globally (optional):
-   ```bash
    npm link
-   ```
+```
 
 ## Usage
 
-### View your portfolio with current prices
+Run ```fit``` to run the program.
 
-```bash
-npm start
-# or if globally linked
-portfolio
-```
+### Options
 
-### View your portfolio offline (no price fetching)
-
-```bash
-npm start -- --offline
-# or if globally linked
-portfolio --offline
-```
-
-### Update historical price data
-
-```bash
-npm start -- --update
-# or if globally linked
-portfolio --update
-```
+- `--update`: Fetch the historical prices for all assets, calculates the latest values, and updates the portfolio summary.
+- `--dev-data`: Load the sample data for testing purposes.
+- `--debug`: Logs debug information to the console.
+- `--currency`: Displays the total value of the portfolio in the specified currency (e.g., USD, EUR). Can specify multiple currencies, comma separated (e.g., `--currency USD,EUR`). The currency conversion rates are fetched from `exchangerate-api.com` and require the API key to be set as `EXCHANGE_RATE_API_KEY` the environment variable.
+- `--help -h`: Display the help message.
 
 ## Data Structure
 
 The portfolio tracker stores all data in JSON files:
 
 - `data/portfolio.json`: Contains the main portfolio summary with all assets and their latest values.
-- `data/assets/{SYMBOL}.json`: Individual files for each asset containing:
-    - Asset information (symbol, name, type, etc.)
-    - Transaction history (buys, sells, dividends, etc.)
-    - Historical price data
+- `data/prices/{SYMBOL}.json`: Historical prices for each asset containing.
+- `data/transactions/{SYMBOL}.json`: Transactions dta for each asset.
 
-## Adding Assets
+## Uninstall
 
-Currently, assets must be added manually by creating the appropriate JSON files in the data directory. In future versions, an interactive command will be available to add assets through the CLI.
-
-## Roadmap
-
-- Add interactive commands for portfolio management (add/edit/remove assets)
-- Implement transaction recording functionality
-- Add data visualization capabilities
-- Support for multiple portfolios
-- Performance reporting for different time periods
-- Export functionality (CSV, PDF)
-- Web interface
-
-## License
-
-MIT
+```bash
+   npm unlink -g fi-tracker
+```

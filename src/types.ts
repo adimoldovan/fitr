@@ -34,6 +34,9 @@ export interface CurrencyPortfolio {
 export interface Portfolio {
     assets: Asset[];
     currencies: CurrencyPortfolio[];
+    total: {
+        eur: number;
+    }
 }
 
 export interface Transaction {
@@ -61,4 +64,14 @@ export interface PricePoint {
 export enum PriceSource {
     YAHOO = 'yahoo',
     MANUAL = 'manual'
+}
+
+export interface CurrencyExchangeRate {
+    pair: string;
+    rate: number;
+    date: string;
+}
+
+export interface CurrencyExchangeRates {
+    rates: CurrencyExchangeRate[];
 }

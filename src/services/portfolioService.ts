@@ -91,6 +91,9 @@ export async function updatePortfolio(): Promise<void> {
                 value,
                 profit: value - cost,
                 profitPercentage: cost > 0 ? ((value - cost) / cost) * 100 : 0,
+                exchangeRate: {
+                    eur: 1
+                },
                 lastUpdated: new Date().toISOString()
             };
 
