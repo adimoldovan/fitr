@@ -28,7 +28,7 @@ export async function displayPortfolio(): Promise<void> {
                 'Currency': currency.currency,
                 'Value': formatNumber(currency.value),
                 'Cost': formatNumber(currency.cost),
-                'P&L':`${getColoredFormatedNumber(currency.profit)}    ${getColoredFormatedNumber(currency.profitPercentage, '%')}`
+                'P&L':`${getColoredFormatedNumber(currency.profit)}\t${getColoredFormatedNumber(currency.profitPercentage, '%')}`
         })
         }
 
@@ -45,7 +45,7 @@ export async function displayPortfolio(): Promise<void> {
                 'Avg Cost': formatNumber(asset.avgCost),
                 'Current Price': formatNumber(asset.lastPrice),
                 'Value': formatNumber(asset.currentValue),
-                'P&L': `${getColoredFormatedNumber(asset.profit)}    ${getColoredFormatedNumber(asset.profitPercentage, '%')}`,
+                'P&L': `${getColoredFormatedNumber(asset.profit)}\t${getColoredFormatedNumber(asset.profitPercentage, '%')}`,
             });
         }
 
