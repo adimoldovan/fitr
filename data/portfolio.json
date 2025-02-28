@@ -1,0 +1,38 @@
+{
+  "assets": [
+    {
+      "symbol": "MSFT",
+      "name": "Microsoft Corporation",
+      "type": "stock",
+      "currency": "USD",
+      "quantity": 2,
+      "avgCost": 415.5,
+      "lastUpdated": "2025-02-27",
+      "lastPrice": 399.73,
+      "totalCost": 831,
+      "currentValue": 799.46,
+      "profit": -31.539999999999964,
+      "profitPercentage": -3.7954271961492134
+    },
+    {
+      "symbol": "GOOGL",
+      "name": "Alphabet Inc.",
+      "type": "stock",
+      "currency": "USD",
+      "quantity": 3,
+      "avgCost": 137.13,
+      "lastUpdated": "2025-02-27",
+      "lastPrice": 172.73,
+      "totalCost": 411.39,
+      "currentValue": 518.1899999999999,
+      "profit": 106.79999999999995,
+      "profitPercentage": 25.96076715525413
+    }
+  ],
+  "totalValue": 1652.5,
+  "lastUpdated": "2025-02-27",
+  "value": 1317.65,
+  "cost": 1242.3899999999999,
+  "profit": 75.26000000000022,
+  "profitPercentage": 6.057679150669292
+}

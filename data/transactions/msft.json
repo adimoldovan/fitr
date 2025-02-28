@@ -1,0 +1,13 @@
+{
+  "symbol": "MSFT",
+  "transactions": [
+    {
+      "date": "2024-02-26",
+      "type": "buy",
+      "quantity": 2,
+      "price": 415.5,
+      "fees": 4.99,
+      "notes": "Long-term investment"
+    }
+  ]
+}

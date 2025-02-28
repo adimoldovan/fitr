@@ -1,0 +1,13 @@
+{
+  "symbol": "GOOGL",
+  "transactions": [
+    {
+      "date": "2024-02-26",
+      "type": "buy",
+      "quantity": 3,
+      "price": 137.13,
+      "fees": 4.99,
+      "notes": "Long-term investment"
+    }
+  ]
+}
