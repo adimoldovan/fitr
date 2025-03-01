@@ -2,6 +2,7 @@ import {format} from 'date-fns';
 import {getPortfolio, updatePortfolio} from '../services/portfolioService.js';
 import {getTransactions} from '../services/transactionService.js';
 import {savePriceHistory, getPriceHistory} from '../services/priceHistoryService.js';
+import {fetchAndSaveCurrencyExchangeRate} from '../services/currencyService.js';
 import {
     getHistoricalPrices,
     getWeeklyPricesSinceLastUpdate
@@ -81,6 +82,18 @@ export async function updateData(): Promise<void> {
         for (const symbol of symbols) {
             await updateHistoricalPricesDataForSymbol(symbol);
         }
+
+        Logger.start(`Updating currency exchange rates...`);
+        const currencies = [...new Set(portfolio.assets.map(asset => asset.currency))];
+
+        for (const c1 of currencies) {
+            for (const c2 of currencies) {
+                if(c1 !== c2) {
+                    await fetchAndSaveCurrencyExchangeRate(c1, c2)
+                }
+            }
+        }
+        Logger.end();
 
         await updatePortfolio();
 

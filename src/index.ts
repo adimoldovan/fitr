@@ -17,8 +17,8 @@ program
     .option('--sync', 'Fetches and updates historical price data for all assets and calculates portfolio performance')
     .option('--debug', 'Use development data directory')
     .option('--dev-data', 'Use development data directory')
-    .option('--convert', 'Display total portfolio value in the each currency')
     .option('--growth-rate <growthRate>', 'Set the expected annual growth rate for the portfolio', '0.07')
+    .option('--skip-prediction', 'Hide the prediction table')
     .helpOption('--help, -h', 'Display help information')
     .action(async (options) => {
         Config.getInstance().setDevMode(!!options.devData);
@@ -37,7 +37,7 @@ program
                 await updateData();
             }
 
-            await displayPortfolio(!!options.convert, options.growthRate);
+            await displayPortfolio(options.growthRate, !!options.skipPrediction);
         } catch (error) {
             Logger.error('', error);
         }

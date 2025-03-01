@@ -56,13 +56,13 @@ async function displayPrediction(currentValue: number, annualGrowthRate: number 
         yearsData.push(yearData);
     }
 
-    Logger.printTable(yearsData, true, `Yearly Investment Needed assuming ${((annualGrowthRate * 100).toFixed(2))}% annual growth rate`);
+    Logger.printTable(yearsData, true, `Yearly Investment Needed - ${((annualGrowthRate * 100).toFixed(2))}% annual growth rate, current value of ${formatNumber(currentValue, 0)}`);
 }
 
 /**
  * Display the current portfolio with latest prices
  */
-export async function displayPortfolio(convert: boolean, annualGrowthRate: string): Promise<void> {
+export async function displayPortfolio(annualGrowthRate: string, skipPrediction: boolean): Promise<void> {
     try {
         const portfolio = await getPortfolio();
 
@@ -71,49 +71,68 @@ export async function displayPortfolio(convert: boolean, annualGrowthRate: strin
             return;
         }
 
-        if (convert) {
-            let eurValue: number = 0;
-            const valueInCurrenciesDataTable = [];
+        const currenciesWithoutExchangeRates = [];
+        // region Convert the total portfolio value to main currency
+        const mainCurrency = 'EUR';
+        let valueInMainCurrency: number = 0;
+        const valueInCurrenciesDataTable = [];
 
-            for (const curr of (portfolio.currencies || [])) {
-                Logger.debug(`Calculating total portfolio in ${curr.currency}`);
-                let valueInCurrency: number = 0;
-                for (const c of (portfolio.currencies || [])) {
-                    if (c.currency.toUpperCase() === curr.currency.toUpperCase()) {
-                        valueInCurrency += c.value;
-                    } else {
-                        const exchangeRate = await getCurrencyExchangeRate(c.currency, curr.currency);
-                        valueInCurrency += c.value * exchangeRate;
+        for (const c1 of (portfolio.currencies || [])) {
+            Logger.debug(`Calculating total portfolio in ${c1.currency}`);
+            let valueInCurrency: number = 0;
+            for (const c2 of (portfolio.currencies || [])) {
+                if (c2.currency.toUpperCase() === c1.currency.toUpperCase()) {
+                    valueInCurrency += c2.value;
+                } else {
+                    const exchangeRate = await getCurrencyExchangeRate(c2.currency, c1.currency);
+                    if (exchangeRate === 0) {
+                        Logger.debug(`Skip conversion from ${c2.currency} to ${c1.currency}`);
+                        currenciesWithoutExchangeRates.push(c1.currency);
+                        break;
                     }
+                    valueInCurrency += c2.value * exchangeRate;
                 }
+            }
 
-                if (curr.currency.toUpperCase() === 'EUR') {
-                    eurValue = valueInCurrency;
-                }
+            if (c1.currency.toUpperCase() === mainCurrency.toUpperCase()) {
+                valueInMainCurrency = valueInCurrency;
+            }
 
+            if (!currenciesWithoutExchangeRates.includes(c1.currency)) {
                 valueInCurrenciesDataTable.push({
-                    'TOTAL': `${curr.currency.toUpperCase()}\t${formatNumber(valueInCurrency)}`
+                    'TOTAL': `${c1.currency.toUpperCase()}\t${formatNumber(valueInCurrency)}`
                 });
             }
 
-            Logger.printTable(valueInCurrenciesDataTable, false, 'Total portfolio value');
-
-            await displayPrediction(eurValue, parseFloat(annualGrowthRate));
         }
 
+        if (valueInCurrenciesDataTable.length > 0) {
+            Logger.printTable(valueInCurrenciesDataTable, false, 'Total portfolio value');
+        }
+        // endregion
+
+        //region Display prediction
+        if (!skipPrediction) {
+            await displayPrediction(valueInMainCurrency, parseFloat(annualGrowthRate));
+        }
+        //endregion
+
+        // region Display portfolio summary
         const summaryTableData = []
 
         for (const currency of (portfolio.currencies || [])) {
             summaryTableData.push({
                 'Currency': currency.currency,
-                'Value': formatNumber(currency.value),
-                'Cost': formatNumber(currency.cost),
+                'Value': formatNumber(currency.value, 0),
+                'Cost': formatNumber(currency.cost, 0),
                 'P&L': `${getColoredFormatedNumber(currency.profit)}\t${getColoredFormatedNumber(currency.profitPercentage, '%')}`
             })
         }
 
         Logger.printTable(summaryTableData, true, 'Portfolio value by currency');
+        // endregion
 
+        // region Display assets
         const tableData = [];
 
         for (const asset of portfolio.assets) {
@@ -132,10 +151,10 @@ export async function displayPortfolio(convert: boolean, annualGrowthRate: strin
         }
 
         Logger.printTable(tableData, true, 'Assets');
+        // endregion
 
     } catch (error) {
-        Logger.error('', error);
-        throw new Error(`Failed to display portfolio!`);
+        Logger.error('Failed to display portfolio!', error, true);
     }
 }
 

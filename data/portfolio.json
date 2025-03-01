@@ -37,16 +37,22 @@
       "value": 799.46,
       "profit": -31.539999999999964,
       "profitPercentage": -3.7954271961492134,
-      "lastUpdated": "2025-02-28T12:44:08.017Z",
-      "currency": "USD"
+      "lastUpdated": "2025-03-01T13:38:09.734Z",
+      "currency": "USD",
+      "exchangeRate": {
+        "eur": 1
+      }
     },
     {
       "cost": 411.39,
       "value": 518.1899999999999,
       "profit": 106.79999999999995,
       "profitPercentage": 25.96076715525413,
-      "lastUpdated": "2025-02-28T12:44:08.017Z",
-      "currency": "EUR"
+      "lastUpdated": "2025-03-01T13:38:09.734Z",
+      "currency": "EUR",
+      "exchangeRate": {
+        "eur": 1
+      }
     }
   ]
 }

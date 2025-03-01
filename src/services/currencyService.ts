@@ -8,21 +8,11 @@ export function getCurrencyExchangeCachePath(): string {
     return path.resolve(getDataDir(), 'currency.json');
 }
 
-export async function getCurrencyExchangeRate(from: string, to: string): Promise<number> {
-    Logger.debug(`Getting exchange rate from ${from} to ${to}`);
-
-    const cachedRate = await getExchangeRateFromCache(from, to);
-
-    if (cachedRate) {
-        Logger.debug(`Found cached conversion rate ${cachedRate}`);
-        return cachedRate;
-    }
-
-    Logger.debug(`Fetching conversion rate from the API`);
+export async function fetchAndSaveCurrencyExchangeRate(from: string, to: string): Promise<void> {
+    Logger.start(`Fetching conversion rate for pair ${from}:${to}`);
 
     if (process.env.EXCHANGE_RATE_API_KEY === undefined) {
         Logger.error('Error fetching conversion rate. EXCHANGE_RATE_API_KEY is not set', null, false);
-        return 0;
     }
 
     const url = `https://v6.exchangerate-api.com/v6/${process.env.EXCHANGE_RATE_API_KEY}/pair/${from}/${to}`;
@@ -30,7 +20,6 @@ export async function getCurrencyExchangeRate(from: string, to: string): Promise
     if (!response.ok) {
         Logger.error(`Error fetching conversion rate from ${from} to ${to}`, null, false);
         console.error(response);
-        return 0;
     }
 
     try {
@@ -41,15 +30,29 @@ export async function getCurrencyExchangeRate(from: string, to: string): Promise
             Logger.error(`Error parsing conversion rate from response ${JSON.stringify(response)}`, null, false);
         }
 
-        await cacheExchangeRate(from, to, data.conversion_rate);
-        return data.conversion_rate;
+        await saveExchangeRate(from, to, data.conversion_rate);
     } catch (error) {
         Logger.error('Error parsing conversion rate response', error, false);
     }
-    return 0;
+
+    Logger.end();
 }
 
-export async function cacheExchangeRate(from: string, to: string, rate: number): Promise<void> {
+export async function getCurrencyExchangeRate(from: string, to: string): Promise<number> {
+    Logger.debug(`Getting exchange rate from ${from} to ${to}`);
+
+    const cache = await getCurrencyExchangeCache();
+    const rate = cache.rates.find((r: CurrencyExchangeRate) => r.pair === `${from.toUpperCase()}:${to.toUpperCase()}`);
+
+    if (rate) {
+        return rate.rate;
+    } else {
+        Logger.warn(`Conversion rate for ${from}:${to} not found. Run with --sync to fetch the latest rates`);
+        return 0;
+    }
+}
+
+export async function saveExchangeRate(from: string, to: string, rate: number): Promise<void> {
     const cache = await getCurrencyExchangeCache();
     const pairKey = `${from.toUpperCase()}:${to.toUpperCase()}`;
     const pair = cache.rates.find((r) => r.pair === pairKey);
@@ -70,23 +73,6 @@ export async function cacheExchangeRate(from: string, to: string, rate: number):
     } catch (error) {
         Logger.error('Error updating currency exchange cache', error);
     }
-}
-
-export async function getExchangeRateFromCache(from: string, to: string): Promise<number> {
-    const cache = await getCurrencyExchangeCache();
-    const rate = cache.rates.find((r: CurrencyExchangeRate) => r.pair === `${from.toUpperCase()}:${to.toUpperCase()}`);
-
-    if (rate) {
-        const cacheDate = new Date(rate.date);
-        const now = new Date();
-        const daysDiff = (now.getTime() - cacheDate.getTime()) / (1000 * 60 * 60 * 24);
-
-        if (daysDiff < 1) {
-            return rate.rate;
-        }
-    }
-
-    return 0;
 }
 
 export async function getCurrencyExchangeCache(): Promise<CurrencyExchangeRates> {
