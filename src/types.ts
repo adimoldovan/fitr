@@ -11,6 +11,7 @@ export interface Asset {
     currentValue: number;
     profit: number;
     profitPercentage: number;
+    mwr: number;
     lastUpdated: string;
 }
 
@@ -52,7 +53,8 @@ export enum TransactionType {
     BUY = 'buy',
     SELL = 'sell',
     DIVIDEND = 'dividend',
-    SPLIT = 'split'
+    SPLIT = 'split',
+    VESTED = 'vested'
 }
 
 export interface PricePoint {

@@ -1,11 +1,11 @@
 import fs from 'fs/promises';
 import path from 'path';
-import { Portfolio, PricePoint } from '../types.js';
-import { getDataDir } from '../utils/storageUtils.js';
-import { getTransactions } from './transactionService.js';
-import { getPriceHistory } from './priceHistoryService.js';
-import { formatNumber } from '../utils/formatUtils.js';
-import { Logger } from '../utils/logger.js';
+import {Portfolio, PricePoint, Transaction, TransactionType} from '../types.js';
+import {getDataDir} from '../utils/storageUtils.js';
+import {getTransactions} from './transactionService.js';
+import {getPriceHistory} from './priceHistoryService.js';
+import {formatNumber} from '../utils/formatUtils.js';
+import {Logger} from '../utils/logger.js';
 
 function getPortfolioPath(): string {
     return path.resolve(getDataDir('portfolioService'), 'portfolio.json');
@@ -30,6 +30,61 @@ export async function savePortfolio(portfolio: Portfolio): Promise<void> {
     }
 }
 
+function calculateMWR(cashFlows: Array<{ amount: number, date: Date }>): number {
+    const guess = 0.1; // Initial guess of 10%
+    const maxIterations = 100;
+    const tolerance = 0.0000001;
+
+    function npv(rate: number): number {
+        return cashFlows.reduce((sum, flow) => {
+            const timeInYears = (flow.date.getTime() - cashFlows[0].date.getTime()) / (365 * 24 * 60 * 60 * 1000);
+            return sum + flow.amount / Math.pow(1 + rate, timeInYears);
+        }, 0);
+    }
+
+    function npvDerivative(rate: number): number {
+        return cashFlows.reduce((sum, flow) => {
+            const timeInYears = (flow.date.getTime() - cashFlows[0].date.getTime()) / (365 * 24 * 60 * 60 * 1000);
+            return sum - (timeInYears * flow.amount) / Math.pow(1 + rate, timeInYears + 1);
+        }, 0);
+    }
+
+    let rate = guess;
+    for (let i = 0; i < maxIterations; i++) {
+        const currentNpv = npv(rate);
+        if (Math.abs(currentNpv) < tolerance) {
+            return rate;
+        }
+        rate = rate - currentNpv / npvDerivative(rate);
+    }
+
+    return rate;
+}
+
+function getStockMWR(transactions: Transaction[], currentValue: number, currentDate: Date): number {
+    // Ignore vested stocks
+    if (transactions.some(t => t.type.toUpperCase() === TransactionType.VESTED.toUpperCase())) {
+        return 0;
+    }
+
+    // Convert transactions to cash flows
+    const cashFlows = [
+        ...transactions.map(t => ({
+            amount: -(t.quantity * t.price),
+            date: new Date(t.date)
+        })),
+        {
+            amount: currentValue,
+            date: currentDate
+        }
+    ];
+
+    // Sort cash flows by date
+    cashFlows.sort((a, b) => a.date.getTime() - b.date.getTime());
+
+    return calculateMWR(cashFlows);
+}
+
 export async function updatePortfolio(): Promise<void> {
     try {
         const portfolio = await getPortfolio();
@@ -43,10 +98,10 @@ export async function updatePortfolio(): Promise<void> {
                 let totalCost = 0;
 
                 for (const transaction of transactions) {
-                    if (transaction.type === 'buy') {
+                    if (transaction.type.toUpperCase() === TransactionType.BUY.toUpperCase() || transaction.type.toUpperCase() === TransactionType.VESTED.toUpperCase()) {
                         totalQuantity += transaction.quantity;
                         totalCost += transaction.quantity * transaction.price;
-                    } else if (transaction.type === 'sell') {
+                    } else if (transaction.type.toUpperCase() === TransactionType.SELL.toUpperCase()) {
                         totalQuantity -= transaction.quantity;
                         totalCost -= (totalCost / totalQuantity) * transaction.quantity;
                     }
@@ -60,6 +115,8 @@ export async function updatePortfolio(): Promise<void> {
                         new Date(b.date).getTime() - new Date(a.date).getTime()
                     )[0];
 
+                const mwr = getStockMWR(transactions, asset.currentValue, new Date());
+
                 // Update asset position
                 asset.lastPrice = latestPrice?.price || 0;
                 asset.quantity = totalQuantity;
@@ -69,6 +126,7 @@ export async function updatePortfolio(): Promise<void> {
                 asset.profit = asset.currentValue - asset.totalCost;
                 asset.profitPercentage = asset.totalCost > 0 ? (asset.profit / asset.totalCost) * 100 : 0;
                 asset.lastUpdated = latestPrice.date;
+                asset.mwr = mwr;
 
                 Logger.info(
                     `Updated ${asset.symbol}:\n\tvalue: ${formatNumber(asset.currentValue)}, ` +
@@ -110,7 +168,7 @@ export async function updatePortfolio(): Promise<void> {
             }
 
             Logger.info(
-                `Updated ${ currency } portfolio: value ${formatNumber(currencyPortfolio.value)}`
+                `Updated ${currency} portfolio: value ${formatNumber(currencyPortfolio.value)}`
             );
 
         }

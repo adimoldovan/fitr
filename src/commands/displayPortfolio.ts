@@ -146,6 +146,7 @@ export async function displayPortfolio(annualGrowthRate: string, skipPrediction:
                 'Current Price': formatNumber(asset.lastPrice),
                 'Currency': asset.currency,
                 'Updated': asset.lastUpdated,
+                'MWR': formatNumber(asset.mwr, 2),
                 'P&L': `${getColoredFormatedNumber(asset.profit)}\t${getColoredFormatedNumber(asset.profitPercentage, '%')}`,
             });
         }
