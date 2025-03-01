@@ -6,7 +6,7 @@ import {getCurrencyExchangeRate} from '../services/currencyService.js';
 
 import {
     formatNumber,
-    getColoredFormatedNumber,
+    getColoredFormatedNumber, highlight,
 } from '../utils/formatUtils.js';
 
 import {Logger} from '../utils/logger.js';
@@ -35,6 +35,7 @@ function generateTargets(currentValue: number): number[] {
 
 async function displayPrediction(currentValue: number, annualGrowthRate: number = 0.07): Promise<void> {
     Logger.debug(`Calculating monthly investment needed ${(annualGrowthRate * 100).toFixed(2)}% annual growth rate`);
+
     const monthlyRate = annualGrowthRate / 12;
     const years = 20;
 
@@ -46,12 +47,13 @@ async function displayPrediction(currentValue: number, annualGrowthRate: number 
 
         for (const target of targets) {
             const key = target >= 1000000 ? `${(target / 1000000).toFixed(1)}m` : `${target / 1000}k`;
-            yearData[key] = calculatePMT(
+            const value = calculatePMT(
                 monthlyRate,
                 i * 12,
                 -currentValue,
                 target
             );
+            yearData[key] = highlight(target===1000000, value);
         }
         yearsData.push(yearData);
     }
@@ -72,6 +74,7 @@ export async function displayPortfolio(annualGrowthRate: string, skipPrediction:
         }
 
         const currenciesWithoutExchangeRates = [];
+
         // region Convert the total portfolio value to main currency
         const mainCurrency = 'EUR';
         let valueInMainCurrency: number = 0;
@@ -125,7 +128,7 @@ export async function displayPortfolio(annualGrowthRate: string, skipPrediction:
                 'Currency': currency.currency,
                 'Value': formatNumber(currency.value, 0),
                 'Cost': formatNumber(currency.cost, 0),
-                'P&L': `${getColoredFormatedNumber(currency.profit)}\t${getColoredFormatedNumber(currency.profitPercentage, '%')}`
+                'P&L': `${getColoredFormatedNumber(currency.profit)}  ${getColoredFormatedNumber(currency.profitPercentage, '%')}`
             })
         }
 
@@ -133,10 +136,14 @@ export async function displayPortfolio(annualGrowthRate: string, skipPrediction:
         // endregion
 
         // region Display assets
-        const tableData = [];
+        const assetsData: Record<string, Record<string, string>[]> = {};
 
         for (const asset of portfolio.assets) {
-            tableData.push({
+            if (!assetsData[asset.type]) {
+                assetsData[asset.type] = [];
+            }
+
+            assetsData[asset.type].push({
                 'Symbol': asset.symbol,
                 'Name': asset.name,
                 'Value': formatNumber(asset.currentValue),
@@ -146,11 +153,13 @@ export async function displayPortfolio(annualGrowthRate: string, skipPrediction:
                 'Avg Cost': formatNumber(asset.avgCost),
                 'Updated': asset.lastUpdated,
                 'MWR': formatNumber(asset.mwr, 2),
-                'P&L': `${getColoredFormatedNumber(asset.profit)}\t${getColoredFormatedNumber(asset.profitPercentage, '%')}`,
+                'P&L': `${getColoredFormatedNumber(asset.profit)}  ${getColoredFormatedNumber(asset.profitPercentage, '%')}`,
             });
         }
 
-        Logger.printTable(tableData, true, 'Assets');
+        for (const type in assetsData) {
+            Logger.printTable(assetsData[type], true, `Assets - ${type}`);
+        }
         // endregion
 
     } catch (error) {

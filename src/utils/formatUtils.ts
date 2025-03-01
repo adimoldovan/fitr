@@ -1,3 +1,5 @@
+import chalk from "chalk";
+
 /**
  * Format a number with decimals
  */
@@ -8,20 +10,21 @@ export function formatNumber(value: number, decimals: number = 2): string {
     }).format(value);
 }
 
-/**
- * Format a color based on whether a value is positive or negative
- */
-export function getColorForValue(value: number): string {
-    if (value > 0) return '\x1b[32m'; // Green
-    if (value < 0) return '\x1b[31m'; // Red
-    return '\x1b[0m'; // Reset
-}
-
 export function getColoredFormatedNumber(value: number, symbol: string = ''): string {
-    return getColorForValue(value) + formatNumber(value) + symbol + resetColor;
+    const text = `  ${formatNumber(value)}${symbol}  `;
+    if (value > 0) {
+        return chalk.bgGreen(text);
+    }
+    if (value < 0) {
+        return chalk.bgRed(text);
+    }
+    return text;
 }
 
-/**
- * Reset color code
- */
-export const resetColor = '\x1b[0m';
+export function highlight(shouldHighlight: boolean, text: string): string {
+    // text = ` ${text} `;
+    if (shouldHighlight) {
+        return chalk.yellowBright(text)
+    }
+    return text;
+}
