@@ -94,6 +94,11 @@ export async function updatePortfolio(): Promise<void> {
                 const transactions = await getTransactions(asset.symbol);
                 const priceHistory = await getPriceHistory(asset.symbol);
 
+                if (transactions.length === 0 || priceHistory.length === 0) {
+                    Logger.warn(`No transactions or price history found for ${asset.symbol}`);
+                    continue;
+                }
+
                 let totalQuantity = 0;
                 let totalCost = 0;
 
