@@ -94,11 +94,6 @@ export async function updatePortfolio(): Promise<void> {
                 const transactions = await getTransactions(asset.symbol);
                 const priceHistory = await getPriceHistory(asset.symbol);
 
-                if (transactions.length === 0 || priceHistory.length === 0) {
-                    Logger.warn(`No transactions or price history found for ${asset.symbol}`);
-                    continue;
-                }
-
                 let totalQuantity = 0;
                 let totalCost = 0;
 
@@ -115,10 +110,10 @@ export async function updatePortfolio(): Promise<void> {
                 const avgCost = totalQuantity > 0 ? totalCost / totalQuantity : 0;
 
                 // Get latest price date
-                const latestPrice = priceHistory
+                const latestPrice = priceHistory.length > 0 ? priceHistory
                     .sort((a: PricePoint, b: PricePoint) =>
                         new Date(b.date).getTime() - new Date(a.date).getTime()
-                    )[0];
+                    )[0] : { price: 0, date: new Date().toISOString() };
 
                 const mwr = getStockMWR(transactions, asset.currentValue, new Date());
 
