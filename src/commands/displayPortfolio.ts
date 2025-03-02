@@ -38,12 +38,13 @@ async function displayPrediction(currentValue: number, annualGrowthRate: number 
     Logger.debug(`Calculating monthly investment needed ${(annualGrowthRate * 100).toFixed(2)}% annual growth rate`);
 
     const monthlyRate = annualGrowthRate / 12;
-    const years = 20;
+    const minYear = Config.getInstance().getConfig().minTargetYear;
+    const maxYears = Config.getInstance().getConfig().maxTargetYear;
 
     const targets = generateTargets(currentValue);
     const yearsData = [];
 
-    for (let i = 1; i <= years; i++) {
+    for (let i = minYear; i <= maxYears; i++) {
         const yearData: Record<string, string> = {year: i.toString()};
 
         for (const target of targets) {
@@ -54,7 +55,7 @@ async function displayPrediction(currentValue: number, annualGrowthRate: number 
                 -currentValue,
                 target
             );
-            yearData[key] = highlight(target===1000000, value);
+            yearData[key] = highlight(target === Config.getInstance().getConfig().highlightTargetValue, value);
         }
         yearsData.push(yearData);
     }

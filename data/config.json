@@ -2,5 +2,8 @@
   "mainCurrency": "EUR",
   "minTargetValue": 100000,
   "maxTargetValue": 1000000,
-  "targetValuePace": 25987
+  "targetValuePace": 100000,
+  "highlightTargetValue": 500000,
+  "minTargetYear": 5,
+  "maxTargetYear": 10
 }

@@ -8,6 +8,9 @@ interface ConfigData {
     minTargetValue: number;
     maxTargetValue: number;
     targetValuePace: number;
+    highlightTargetValue: number;
+    minTargetYear: number;
+    maxTargetYear: number;
 }
 
 export class Config {
@@ -19,6 +22,9 @@ export class Config {
         minTargetValue: 100000,
         maxTargetValue: 1000000,
         targetValuePace: 100000,
+        highlightTargetValue: 500000,
+        minTargetYear: 1,
+        maxTargetYear: 20
     };
 
     private constructor() {
@@ -38,6 +44,15 @@ export class Config {
             Logger.debug(`Loading config from ${configPath}`);
             const configFile = await fs.promises.readFile(configPath, 'utf8');
             const loadedConfig = JSON.parse(configFile);
+
+            if (loadedConfig.minTargetYear < 1) {
+                Logger.error('minTargetYear must be greater than 0', null, true);
+            }
+
+            if (loadedConfig.minTargetYear > loadedConfig.maxTargetYear) {
+                Logger.error('maxTargetYear must be greater or equal to minTargetYear', null, true);
+            }
+
             this.config = {...this.config, ...loadedConfig};
         } catch (error) {
             Logger.error('Failed to load config.json', error, true);
