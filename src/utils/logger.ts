@@ -86,7 +86,7 @@ export class Logger {
             );
         });
 
-        console.log(chalk.bgMagenta(`  ${title}  `));
+        console.log(chalk.bgHex('#5a3f65')(`  ${title}  `));
 
         // Print header
         const headerLine = columns.map(col =>

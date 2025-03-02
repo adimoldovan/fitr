@@ -13,10 +13,11 @@ export function formatNumber(value: number, decimals: number = 2): string {
 export function getColoredFormatedNumber(value: number, symbol: string = ''): string {
     const text = `  ${formatNumber(value)}${symbol}  `;
     if (value > 0) {
-        return chalk.bgGreen(text);
+        // return chalk.bgGreen(text);
+        return chalk.bgHex('#384f21')(text);
     }
     if (value < 0) {
-        return chalk.bgRed(text);
+        return chalk.bgHex('#732f2c')(text);
     }
     return text;
 }
