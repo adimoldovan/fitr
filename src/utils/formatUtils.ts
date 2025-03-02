@@ -11,7 +11,20 @@ export function formatNumber(value: number, decimals: number = 2): string {
 }
 
 export function getColoredFormatedNumber(value: number, symbol: string = ''): string {
-    const text = `  ${formatNumber(value)}${symbol}  `;
+    // text = `  ${formatNumber(value)}${symbol}  `;
+    let text = formatNumber(value);
+
+    if(value >= 1000000) {
+        text = `${(value / 1000000).toFixed(2)}m`;
+    } else if(value >= 10000) {
+        text = `${(value / 1000).toFixed(2)}k`;
+    }
+
+    // const text = value >= 1000000 ? `${(value / 1000000).toFixed(2)}m` : `${(value / 1000).toFixed(0)}k`;
+    text = `${text}${symbol}`;
+    text = text.padEnd((8 - text.length) + text.length + 2, ' ');
+    text = text.padStart(text.length + 2, ' ')
+
     if (value > 0) {
         // return chalk.bgGreen(text);
         return chalk.bgHex('#384f21')(text);
