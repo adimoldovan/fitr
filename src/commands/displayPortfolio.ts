@@ -10,6 +10,7 @@ import {
 } from '../utils/formatUtils.js';
 
 import {Logger} from '../utils/logger.js';
+import {Config} from "../config.js";
 
 function calculatePMT(rate: number, nper: number, pv: number, fv: number): string {
     //PMT(annualGrowthRate/12,noOfYears*12,currentValue,targetValue)
@@ -23,10 +24,10 @@ function calculatePMT(rate: number, nper: number, pv: number, fv: number): strin
 }
 
 function generateTargets(currentValue: number): number[] {
-    const start = Math.ceil(currentValue / 100000) * 100000;
+    const start = Math.ceil(currentValue / Config.getInstance().getConfig().targetValuePace) * Config.getInstance().getConfig().minTargetValue;
     const targets = [];
 
-    for (let target = start; target <= 2000000; target += 100000) {
+    for (let target = start; target <= Config.getInstance().getConfig().maxTargetValue; target += Config.getInstance().getConfig().targetValuePace) {
         targets.push(target);
     }
 
@@ -46,7 +47,7 @@ async function displayPrediction(currentValue: number, annualGrowthRate: number 
         const yearData: Record<string, string> = {year: i.toString()};
 
         for (const target of targets) {
-            const key = target >= 1000000 ? `${(target / 1000000).toFixed(1)}m` : `${target / 1000}k`;
+            const key = target >= 1000000 ? `${(target / 1000000).toFixed(2)}m` : `${(target / 1000).toFixed(0)}k`;
             const value = calculatePMT(
                 monthlyRate,
                 i * 12,
@@ -76,7 +77,7 @@ export async function displayPortfolio(annualGrowthRate: string, skipPrediction:
         const currenciesWithoutExchangeRates = [];
 
         // region Convert the total portfolio value to main currency
-        const mainCurrency = 'EUR';
+        const mainCurrency = Config.getInstance().getConfig().mainCurrency;
         let valueInMainCurrency: number = 0;
         const valueInCurrenciesDataTable = [];
 

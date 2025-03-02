@@ -5,9 +5,9 @@ import {Logger} from "./utils/logger.js";
 
 interface ConfigData {
     mainCurrency: string;
-    minTargetValue: string;
-    maxTargetValue: string;
-    targetValuePace: string;
+    minTargetValue: number;
+    maxTargetValue: number;
+    targetValuePace: number;
 }
 
 export class Config {
@@ -15,10 +15,10 @@ export class Config {
     private devMode: boolean = false;
     private debugMode: boolean = false;
     private config: ConfigData = {
-        mainCurrency: '',
-        minTargetValue: '',
-        maxTargetValue: '',
-        targetValuePace: '',
+        mainCurrency: 'EUR',
+        minTargetValue: 100000,
+        maxTargetValue: 1000000,
+        targetValuePace: 100000,
     };
 
     private constructor() {
@@ -31,13 +31,7 @@ export class Config {
             await fs.promises.access(configPath);
         } catch {
             Logger.debug(`Config file not found at ${configPath}, creating default config`);
-            const defaultConfig = {
-                mainCurrency: 'EUR',
-                minTargetValue: '500000',
-                maxTargetValue: '1000000',
-                targetValuePace: '100000'
-            };
-            await fs.promises.writeFile(configPath, JSON.stringify(defaultConfig, null, 2));
+            await fs.promises.writeFile(configPath, JSON.stringify(this.config, null, 2));
         }
 
         try {
