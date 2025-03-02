@@ -1,0 +1,6 @@
+{
+  "mainCurrency": "EUR",
+  "minTargetValue": "500000",
+  "maxTargetValue": "1000000",
+  "targetValuePace": "100000"
+}

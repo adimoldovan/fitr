@@ -1,10 +1,10 @@
 #!/usr/bin/env node
-import { Command } from 'commander';
-import { displayPortfolio } from './commands/displayPortfolio.js';
-import { updateData } from './commands/updateData.js';
-import { initializeStorage } from './utils/storageUtils.js';
-import { Config } from './config.js';
-import { Logger } from './utils/logger.js';
+import {Command} from 'commander';
+import {displayPortfolio} from './commands/displayPortfolio.js';
+import {updateData} from './commands/updateData.js';
+import {initializeStorage} from './utils/storageUtils.js';
+import {Config} from './config.js';
+import {Logger} from './utils/logger.js';
 
 const program = new Command();
 
@@ -23,12 +23,16 @@ program
     .action(async (options) => {
         Config.getInstance().setDevMode(!!options.devData);
         Config.getInstance().setDebugMode(!!options.debug);
+        await Config.getInstance().loadConfigFromFile();
 
         if (options.debug) {
             Logger.debug(`Options: ${JSON.stringify(options)}`);
+            Logger.debug(`Config: ${JSON.stringify(Config.getInstance())}`);
         }
 
-        Logger.info(`Running in ${Config.getInstance().isDevMode() ? 'development' : 'production'} data mode`);
+        if (Config.getInstance().isDevMode()) {
+            Logger.info(`Running in dev data mode`);
+        }
 
         await initializeStorage();
 
