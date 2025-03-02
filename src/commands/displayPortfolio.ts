@@ -45,8 +45,7 @@ async function displayPrediction(currentValue: number, annualGrowthRate: number 
     const yearsData = [];
 
     for (let i = minYear; i <= maxYears; i++) {
-        const yearData: Record<string, string> = {year: i.toString()};
-
+        const yearData: Record<string, string> = {year: (`${new Date().getFullYear() + i} (${i})`)};
         for (const target of targets) {
             const key = target >= 1000000 ? `${(target / 1000000).toFixed(2)}m` : `${(target / 1000).toFixed(0)}k`;
             const value = calculatePMT(
