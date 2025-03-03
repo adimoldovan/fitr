@@ -129,7 +129,7 @@ export async function displayPortfolio(annualGrowthRate: string, skipPrediction:
                 'Currency': currency.currency,
                 'Value': formatNumber(currency.value, 0),
                 'Cost': formatNumber(currency.cost, 0),
-                'P&L': `${getColoredFormatedNumber(currency.profit)}  ${getColoredFormatedNumber(currency.profitPercentage, '%')}`
+                'P&L': `${getColoredFormatedNumber(currency.profit)} ${getColoredFormatedNumber(currency.profitPercentage, '%')}`
             })
         }
 
@@ -138,6 +138,7 @@ export async function displayPortfolio(annualGrowthRate: string, skipPrediction:
 
         // region Display assets
         const assetsData: Record<string, Record<string, string>[]> = {};
+        portfolio.assets.sort((a, b) => b.currentValue - a.currentValue);
 
         for (const asset of portfolio.assets) {
             if (!assetsData[asset.type]) {
@@ -147,14 +148,14 @@ export async function displayPortfolio(annualGrowthRate: string, skipPrediction:
             assetsData[asset.type].push({
                 'Symbol': asset.symbol,
                 'Name': asset.name,
-                'Value': formatNumber(asset.currentValue),
                 'Currency': asset.currency,
+                'Value': formatNumber(asset.currentValue),
+                'P&L': `${getColoredFormatedNumber(asset.profit)} ${getColoredFormatedNumber(asset.profitPercentage, '%')}`,
                 'Current Price': formatNumber(asset.lastPrice),
-                'Quantity': formatNumber(asset.quantity, 4),
-                'Avg Cost': formatNumber(asset.avgCost),
-                'Updated': asset.lastUpdated,
+                'Quantity': formatNumber(asset.quantity, 2),
+                'Avg Price': formatNumber(asset.avgCost),
                 'MWR': formatNumber(asset.mwr, 2),
-                'P&L': `${getColoredFormatedNumber(asset.profit)}  ${getColoredFormatedNumber(asset.profitPercentage, '%')}`,
+                'Updated': asset.lastUpdated,
             });
         }
 

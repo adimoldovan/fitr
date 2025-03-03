@@ -6,14 +6,15 @@
       "name": "Microsoft Corporation",
       "type": "stock",
       "currency": "USD",
-      "quantity": 2,
-      "avgCost": 415.5,
+      "quantity": 4,
+      "avgCost": 420.5,
       "lastUpdated": "2025-02-27",
       "lastPrice": 399.73,
-      "totalCost": 831,
-      "currentValue": 799.46,
-      "profit": -31.539999999999964,
-      "profitPercentage": -3.7954271961492134
+      "totalCost": 1682,
+      "currentValue": 1598.92,
+      "profit": -83.07999999999993,
+      "profitPercentage": -4.939357907253266,
+      "mwr": -0.05063826498953474
     },
     {
       "symbol": "GOOGL",
@@ -21,34 +22,35 @@
       "name": "Alphabet Inc.",
       "type": "stock",
       "currency": "EUR",
-      "quantity": 3,
-      "avgCost": 137.13,
+      "quantity": 340,
+      "avgCost": 88.60058823529411,
       "lastUpdated": "2025-02-27",
       "lastPrice": 172.73,
-      "totalCost": 411.39,
-      "currentValue": 518.1899999999999,
-      "profit": 106.79999999999995,
-      "profitPercentage": 25.96076715525413
+      "totalCost": 30124.199999999997,
+      "currentValue": 58728.2,
+      "profit": 28604,
+      "profitPercentage": 94.95355893268535,
+      "mwr": 0.19655872540114822
     }
   ],
   "currencies": [
     {
-      "cost": 831,
-      "value": 799.46,
-      "profit": -31.539999999999964,
-      "profitPercentage": -3.7954271961492134,
-      "lastUpdated": "2025-03-01T13:38:09.734Z",
+      "cost": 1682,
+      "value": 1598.92,
+      "profit": -83.07999999999993,
+      "profitPercentage": -4.939357907253266,
+      "lastUpdated": "2025-03-02T11:37:43.349Z",
       "currency": "USD",
       "exchangeRate": {
         "eur": 1
       }
     },
     {
-      "cost": 411.39,
-      "value": 518.1899999999999,
-      "profit": 106.79999999999995,
-      "profitPercentage": 25.96076715525413,
-      "lastUpdated": "2025-03-01T13:38:09.734Z",
+      "cost": 30124.199999999997,
+      "value": 58728.2,
+      "profit": 28604,
+      "profitPercentage": 94.95355893268535,
+      "lastUpdated": "2025-03-02T11:37:43.350Z",
       "currency": "EUR",
       "exchangeRate": {
         "eur": 1

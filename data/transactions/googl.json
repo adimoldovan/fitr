@@ -4,8 +4,24 @@
     {
       "date": "2024-02-26",
       "type": "buy",
-      "quantity": 3,
+      "quantity": 50,
       "price": 137.13,
+      "fees": 4.99,
+      "notes": "Long-term investment"
+    },
+    {
+      "date": "2024-03-26",
+      "type": "buy",
+      "quantity": 90,
+      "price": 147.13,
+      "fees": 4.99,
+      "notes": "Long-term investment"
+    },
+    {
+      "date": "2018-03-26",
+      "type": "buy",
+      "quantity": 200,
+      "price": 50.13,
       "fees": 4.99,
       "notes": "Long-term investment"
     }

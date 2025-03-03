@@ -69,7 +69,7 @@ export class Logger {
     }
 
     static stripAnsi(str: string): string {
-        return str.replace(/\x1B\[[0-9;]*[JKmsu]/g, '');
+        return str.replace(/\x1B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~])/g, '');
     }
 
     static printTable(data: Record<string, string>[], withHeader: boolean, title: string) {
@@ -94,7 +94,7 @@ export class Logger {
         ).join(' | ');
         if (withHeader) {
             console.log('-'.repeat(headerLine.length));
-            console.log(headerLine);
+            console.log(headerLine.toUpperCase());
         }
         console.log('='.repeat(headerLine.length));
 
