@@ -16,6 +16,14 @@
       "price": 425.5,
       "fees": 4.99,
       "notes": "Long-term investment"
+    },
+    {
+      "date": "2025-03-10",
+      "type": "buy",
+      "quantity": 15,
+      "price": 120,
+      "fees": 0,
+      "notes": ""
     }
   ]
 }

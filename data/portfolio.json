@@ -6,15 +6,15 @@
       "name": "Microsoft Corporation",
       "type": "stock",
       "currency": "USD",
-      "quantity": 4,
-      "avgCost": 420.5,
+      "quantity": 19,
+      "avgCost": 183.26315789473685,
       "lastUpdated": "2025-02-27",
       "lastPrice": 399.73,
-      "totalCost": 1682,
-      "currentValue": 1598.92,
-      "profit": -83.07999999999993,
-      "profitPercentage": -4.939357907253266,
-      "mwr": -0.05063826498953474
+      "totalCost": 3482,
+      "currentValue": 7594.870000000001,
+      "profit": 4112.870000000001,
+      "profitPercentage": 118.11803561171743,
+      "mwr": null
     },
     {
       "symbol": "GOOGL",
@@ -30,16 +30,16 @@
       "currentValue": 58728.2,
       "profit": 28604,
       "profitPercentage": 94.95355893268535,
-      "mwr": 0.19655872540114822
+      "mwr": 0.19552092838275256
     }
   ],
   "currencies": [
     {
-      "cost": 1682,
-      "value": 1598.92,
-      "profit": -83.07999999999993,
-      "profitPercentage": -4.939357907253266,
-      "lastUpdated": "2025-03-02T11:37:43.349Z",
+      "cost": 3482,
+      "value": 7594.870000000001,
+      "profit": 4112.870000000001,
+      "profitPercentage": 118.11803561171743,
+      "lastUpdated": "2025-03-10T11:24:04.804Z",
       "currency": "USD",
       "exchangeRate": {
         "eur": 1
@@ -50,7 +50,7 @@
       "value": 58728.2,
       "profit": 28604,
       "profitPercentage": 94.95355893268535,
-      "lastUpdated": "2025-03-02T11:37:43.350Z",
+      "lastUpdated": "2025-03-10T11:24:04.804Z",
       "currency": "EUR",
       "exchangeRate": {
         "eur": 1

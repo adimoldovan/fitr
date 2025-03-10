@@ -31,3 +31,14 @@ export async function getTransactions(symbol: string): Promise<Transaction[]> {
         return [];
     }
 }
+
+export async function saveTransactions(symbol: string, transactions: Transaction[]): Promise<void> {
+    try {
+        const filePath = await getTransactionsPath(symbol);
+        await fs.writeFile(filePath, JSON.stringify({ symbol, transactions }, null, 2));
+        Logger.debug(`Saved ${transactions.length} transactions for ${symbol}`);
+    } catch (error) {
+        Logger.error(`Error saving transactions for ${symbol}`, error);
+        throw error;
+    }
+}
