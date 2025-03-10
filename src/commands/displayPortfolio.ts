@@ -59,7 +59,7 @@ async function displayPrediction(currentValue: number, annualGrowthRate: number 
         yearsData.push(yearData);
     }
 
-    Logger.printTable(yearsData, true, `Yearly Investment Needed - ${((annualGrowthRate * 100).toFixed(2))}% annual growth rate, current value of ${formatNumber(currentValue, 0)}`);
+    Logger.printTable(yearsData, true, `Monthly Investment Needed - ${((annualGrowthRate * 100).toFixed(2))}% annual growth rate, current value of ${formatNumber(currentValue, 0)}`);
 }
 
 /**
@@ -154,7 +154,8 @@ export async function displayPortfolio(annualGrowthRate: string, skipPrediction:
                 'Current Price': formatNumber(asset.lastPrice),
                 'Quantity': formatNumber(asset.quantity, 2),
                 'Avg Price': formatNumber(asset.avgCost),
-                'MWR': formatNumber(asset.mwr, 2),
+                'MWR': getColoredFormatedNumber(asset.mwr * 100, '%'),
+                'TWR': getColoredFormatedNumber(asset.twr * 100, '%'),
                 'Updated': asset.lastUpdated,
             });
         }

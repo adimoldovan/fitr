@@ -12,6 +12,7 @@ export interface Asset {
     profit: number;
     profitPercentage: number;
     mwr: number;
+    twr: number;
     lastUpdated: string;
 }
 

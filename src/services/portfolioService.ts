@@ -85,6 +85,155 @@ function getStockMWR(transactions: Transaction[], currentValue: number, currentD
     return calculateMWR(cashFlows);
 }
 
+/**
+ * Calculate Time-Weighted Return (TWR) for an asset
+ * TWR eliminates the distorting effects of cash inflows and outflows
+ * and provides a more accurate measure of investment performance
+ * 
+ * @param transactions Array of transactions for the asset
+ * @param currentPrice Current price of the asset
+ * @param currentDate Current date
+ * @returns The time-weighted return as a decimal (e.g., 0.1 for 10%)
+ */
+function calculateTWR(transactions: Transaction[], currentPrice: number, currentDate: Date): number {
+    if (transactions.length === 0 || currentPrice <= 0) {
+        return 0;
+    }
+
+    // Filter out non-buy/sell transactions as they don't affect holdings
+    const relevantTransactions = transactions.filter(
+        t => t.type === TransactionType.BUY || 
+             t.type === TransactionType.SELL || 
+             t.type === TransactionType.VESTED
+    );
+
+    if (relevantTransactions.length === 0) {
+        return 0;
+    }
+
+    // Sort transactions by date
+    const sortedTransactions = [...relevantTransactions].sort(
+        (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
+    );
+
+    // Create a timeline of all events (transactions and final valuation)
+    type TimelineEvent = {
+        date: Date;
+        isTransaction: boolean;
+        transaction?: Transaction;
+        price: number;
+        holdings: number; // Number of shares held after this event
+        value: number;    // Value of holdings after this event
+    };
+
+    const timeline: TimelineEvent[] = [];
+    let currentHoldings = 0;
+
+    // Add transactions to timeline
+    for (const transaction of sortedTransactions) {
+        // Get transaction date
+        const transactionDate = new Date(transaction.date);
+        
+        if (transaction.type === TransactionType.BUY || transaction.type === TransactionType.VESTED) {
+            currentHoldings += transaction.quantity;
+        } else if (transaction.type === TransactionType.SELL) {
+            currentHoldings -= transaction.quantity;
+        }
+
+        timeline.push({
+            date: transactionDate,
+            isTransaction: true,
+            transaction,
+            price: transaction.price, // Use transaction price
+            holdings: currentHoldings,
+            value: currentHoldings * transaction.price
+        });
+    }
+
+    // Add the current price point to calculate final return
+    timeline.push({
+        date: currentDate,
+        isTransaction: false,
+        price: currentPrice,
+        holdings: currentHoldings,
+        value: currentHoldings * currentPrice
+    });
+
+    // Sort timeline by date
+    timeline.sort((a, b) => a.date.getTime() - b.date.getTime());
+
+    // Calculate holding period returns between cash flow events
+    const holdingPeriodReturns: number[] = [];
+    let previousValue = 0;
+    let previousHoldings = 0;
+
+    for (let i = 0; i < timeline.length; i++) {
+        const event = timeline[i];
+        
+        if (i > 0) {
+            // If holdings changed (due to a transaction), calculate return for the period
+            if (event.isTransaction && event.transaction) {
+                // Calculate value before transaction (using the price from this transaction)
+                const valueBeforeTransaction = previousHoldings * event.price;
+                
+                // Calculate holding period return if we had previous holdings
+                if (previousHoldings > 0 && previousValue > 0) {
+                    // Calculate HPR: (End Value / Start Value) - 1
+                    const hpr = valueBeforeTransaction / previousValue - 1;
+                    
+                    // Sanity check: Ignore extreme values that might be due to data issues
+                    if (hpr > -0.9 && hpr < 10) {  // Allow up to 1000% gain but not more
+                        holdingPeriodReturns.push(hpr);
+                    } else {
+                        Logger.debug(`Ignoring extreme HPR value: ${hpr} for transaction on ${event.date.toISOString()}`);
+                    }
+                }
+                
+                // Update previous values after transaction
+                previousValue = event.value;
+                previousHoldings = event.holdings;
+            } else if (!event.isTransaction) {
+                // For price updates (not transactions), calculate return if holdings didn't change
+                if (previousHoldings > 0 && previousValue > 0 && event.holdings === previousHoldings) {
+                    // Calculate HPR: (End Value / Start Value) - 1
+                    const hpr = event.value / previousValue - 1;
+                    
+                    // Sanity check: Ignore extreme values that might be due to data issues
+                    if (hpr > -0.9 && hpr < 10) {  // Allow up to 1000% gain but not more
+                        holdingPeriodReturns.push(hpr);
+                    } else {
+                        Logger.debug(`Ignoring extreme HPR value: ${hpr} for price update on ${event.date.toISOString()}`);
+                    }
+                }
+                
+                // Update previous values
+                previousValue = event.value;
+                previousHoldings = event.holdings;
+            }
+        } else {
+            // First event, just store the values
+            previousValue = event.value;
+            previousHoldings = event.holdings;
+        }
+    }
+
+    // If no valid holding period returns, return 0
+    if (holdingPeriodReturns.length === 0) {
+        return 0;
+    }
+
+    // Calculate TWR by compounding the holding period returns
+    const twr = holdingPeriodReturns.reduce((acc, hpr) => (1 + acc) * (1 + hpr) - 1, 0);
+    
+    // Apply a sanity check to the final TWR value
+    if (twr < -0.9 || twr > 10) {
+        Logger.debug(`Calculated TWR is outside reasonable range: ${twr}. Capping it.`);
+        return twr < -0.9 ? -0.9 : 10;  // Cap at -90% loss or 1000% gain
+    }
+    
+    return twr;
+}
+
 export async function updatePortfolio(): Promise<void> {
     try {
         const portfolio = await getPortfolio();
@@ -116,6 +265,9 @@ export async function updatePortfolio(): Promise<void> {
                     )[0] : { price: 0, date: new Date().toISOString() };
 
                 const mwr = getStockMWR(transactions, asset.currentValue, new Date());
+                
+                // Calculate Time-Weighted Return (TWR)
+                const twr = calculateTWR(transactions, latestPrice?.price || 0, new Date(latestPrice?.date || new Date().toISOString()));
 
                 // Update asset position
                 asset.lastPrice = latestPrice?.price || 0;
@@ -127,10 +279,12 @@ export async function updatePortfolio(): Promise<void> {
                 asset.profitPercentage = asset.totalCost > 0 ? (asset.profit / asset.totalCost) * 100 : 0;
                 asset.lastUpdated = latestPrice.date;
                 asset.mwr = mwr;
+                asset.twr = twr;
 
                 Logger.info(
                     `Updated ${asset.symbol}:\n\tvalue: ${formatNumber(asset.currentValue)}, ` +
-                    `p&l: ${formatNumber(asset.profit)} (${asset.profitPercentage.toFixed(2)}%)`
+                    `p&l: ${formatNumber(asset.profit)} (${asset.profitPercentage.toFixed(2)}%), ` +
+                    `TWR: ${(twr * 100).toFixed(2)}%`
                 );
             } catch (error) {
                 Logger.error(`Error updating asset ${asset.symbol}`, error);
