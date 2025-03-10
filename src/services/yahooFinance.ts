@@ -56,7 +56,7 @@ export async function getHistoricalPrices(
  * @param dayOfWeek The day of the week to find (0 = Sunday, 1 = Monday, etc.)
  * @returns The next occurrence of the specified day
  */
-function getNextDayOfWeek(date: Date, dayOfWeek: 0 | 1 | 2 | 3 | 4 | 5 | 6): Date {
+export function getNextDayOfWeek(date: Date, dayOfWeek: 0 | 1 | 2 | 3 | 4 | 5 | 6): Date {
     const currentDay = getDay(date);
     
     // Calculate days to add
