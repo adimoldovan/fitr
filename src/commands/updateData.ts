@@ -86,10 +86,10 @@ async function updateHistoricalPricesDataForSymbol(
             
             // Fetch new weekly prices
             const newPricePoints = await getWeeklyPrices(symbol, latestPricePoint.date, weekStartsOn);
-            Logger.info(`Fetched ${newPricePoints.length} new price points for ${symbol}`);
+            Logger.debug(`Fetched ${newPricePoints.length} new price points for ${symbol}`);
             
             if (newPricePoints.length === 0) {
-                Logger.info(`No new price points for ${symbol}. Skipping update.`);
+                Logger.debug(`No new price points for ${symbol}. Skipping update.`);
                 return;
             }
             

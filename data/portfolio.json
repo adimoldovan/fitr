@@ -8,13 +8,14 @@
       "currency": "USD",
       "quantity": 19,
       "avgCost": 183.26315789473685,
-      "lastUpdated": "2025-02-27",
-      "lastPrice": 399.73,
+      "lastUpdated": "2025-03-10",
+      "lastPrice": 381.44000244140625,
       "totalCost": 3482,
-      "currentValue": 7594.870000000001,
-      "profit": 4112.870000000001,
-      "profitPercentage": 118.11803561171743,
-      "mwr": null
+      "currentValue": 7247.360046386719,
+      "profit": 3765.3600463867188,
+      "profitPercentage": 108.13785314149106,
+      "mwr": 2.2432046814816426,
+      "twr": -0.08197351999661551
     },
     {
       "symbol": "GOOGL",
@@ -24,22 +25,23 @@
       "currency": "EUR",
       "quantity": 340,
       "avgCost": 88.60058823529411,
-      "lastUpdated": "2025-02-27",
-      "lastPrice": 172.73,
+      "lastUpdated": "2025-03-10",
+      "lastPrice": 165.80149841308594,
       "totalCost": 30124.199999999997,
-      "currentValue": 58728.2,
-      "profit": 28604,
-      "profitPercentage": 94.95355893268535,
-      "mwr": 0.19552092838275256
+      "currentValue": 56372.50946044922,
+      "profit": 26248.30946044922,
+      "profitPercentage": 87.13363163320263,
+      "mwr": 0.18463176418474858,
+      "twr": 2.307430648575423
     }
   ],
   "currencies": [
     {
       "cost": 3482,
-      "value": 7594.870000000001,
-      "profit": 4112.870000000001,
-      "profitPercentage": 118.11803561171743,
-      "lastUpdated": "2025-03-10T11:24:04.804Z",
+      "value": 7247.360046386719,
+      "profit": 3765.3600463867188,
+      "profitPercentage": 108.13785314149106,
+      "lastUpdated": "2025-03-10T16:08:09.068Z",
       "currency": "USD",
       "exchangeRate": {
         "eur": 1
@@ -47,10 +49,10 @@
     },
     {
       "cost": 30124.199999999997,
-      "value": 58728.2,
-      "profit": 28604,
-      "profitPercentage": 94.95355893268535,
-      "lastUpdated": "2025-03-10T11:24:04.804Z",
+      "value": 56372.50946044922,
+      "profit": 26248.30946044922,
+      "profitPercentage": 87.13363163320263,
+      "lastUpdated": "2025-03-10T16:08:09.068Z",
       "currency": "EUR",
       "exchangeRate": {
         "eur": 1

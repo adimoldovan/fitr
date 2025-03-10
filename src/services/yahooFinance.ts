@@ -1,5 +1,5 @@
 import yahooFinance from 'yahoo-finance2';
-import { format, parse, startOfWeek, addDays, parseISO, isBefore, getDay } from 'date-fns';
+import { format, parse, startOfWeek, addDays, parseISO, isBefore, getDay, isEqual } from 'date-fns';
 import { PricePoint, PriceSource } from '../types.js';
 import { Logger } from '../utils/logger.js';
 
@@ -9,7 +9,7 @@ import { Logger } from '../utils/logger.js';
 export async function getHistoricalPrices(
     symbol: string,
     fromDate: string,
-    toDate: string = format(new Date(), 'yyyy-MM-dd'), 
+    toDate: string = format(new Date(), 'yyyy-MM-dd'),
     interval: '1wk' | '1d' = '1wk'
 ): Promise<PricePoint[]> {
     try {
@@ -18,25 +18,55 @@ export async function getHistoricalPrices(
         const from = parse(fromDate, 'yyyy-MM-dd', new Date());
         const to = parse(toDate, 'yyyy-MM-dd', new Date());
 
-        const historicalResult = await yahooFinance.historical(symbol, {
+        // Ensure period1 and period2 are not the same date
+        // If they are the same, add one day to period2
+        const adjustedTo = isEqual(from, to) ? addDays(to, 1) : to;
+        
+        if (isEqual(from, to)) {
+            Logger.debug(`fromDate and toDate are the same (${fromDate}). Adjusting toDate to the next day.`);
+        }
+
+        // Use chart() instead of historical() as recommended by yahoo-finance2
+        const chartResult = await yahooFinance.chart(symbol, {
             period1: from,
-            period2: to,
-            interval
+            period2: adjustedTo,
+            interval: interval // Weekly or daily data
         });
 
         // Map the data to our PricePoint format
-        const pricePoints: PricePoint[] = historicalResult.map(item => ({
-            date: format(item.date, 'yyyy-MM-dd'),
-            price: item.close,
-            source: PriceSource.YAHOO
-        }));
+        const pricePoints: PricePoint[] = chartResult.quotes
+            .filter(quote => quote.close !== null) // Filter out null values
+            .map(quote => ({
+                date: format(new Date(quote.date), 'yyyy-MM-dd'),
+                price: quote.close as number, // We've filtered out null values
+                source: PriceSource.YAHOO
+            }));
 
-        Logger.info(`Found ${pricePoints.length} historical price points for ${symbol}`);
+        Logger.debug(`Found ${pricePoints.length} historical price points for ${symbol}`);
         return pricePoints;
     } catch (error) {
         Logger.error(`Error fetching historical prices for ${symbol}`, error);
         return [];
     }
+}
+
+/**
+ * Get the next occurrence of a specific day of the week after a given date
+ * @param date The starting date
+ * @param dayOfWeek The day of the week to find (0 = Sunday, 1 = Monday, etc.)
+ * @returns The next occurrence of the specified day
+ */
+function getNextDayOfWeek(date: Date, dayOfWeek: 0 | 1 | 2 | 3 | 4 | 5 | 6): Date {
+    const currentDay = getDay(date);
+    
+    // Calculate days to add
+    let daysToAdd = dayOfWeek - currentDay;
+    if (daysToAdd <= 0) {
+        // If the day has already occurred this week, go to next week
+        daysToAdd += 7;
+    }
+    
+    return addDays(date, daysToAdd);
 }
 
 /**
@@ -71,12 +101,13 @@ export async function getWeeklyPrices(
             return [];
         }
         
-        // Add one day to sinceDate to avoid getting the same date twice
-        const nextDay = addDays(sinceDateObj, 1);
-        const fromDate = format(nextDay, 'yyyy-MM-dd');
-        const toDate = format(today, 'yyyy-MM-dd');
+        // Find the next occurrence of the specified weekday after sinceDate
+        const nextWeekday = getNextDayOfWeek(sinceDateObj, weekStartsOn);
+        Logger.debug(`Next ${weekStartsOn} after ${sinceDate} is ${format(nextWeekday, 'yyyy-MM-dd')}`);
         
-        Logger.info(`Fetching weekly prices from ${fromDate} to ${toDate} with week starting on day ${weekStartsOn}`);
+        // Format dates for API call
+        const fromDate = format(nextWeekday, 'yyyy-MM-dd');
+        const toDate = format(today, 'yyyy-MM-dd');
         
         // Fetch historical prices
         const allPrices = await getHistoricalPrices(symbol, fromDate, toDate, '1wk');
@@ -97,7 +128,7 @@ export async function getWeeklyPrices(
         }
         
         // If we don't have enough data or no filtered prices, return all prices
-        Logger.debug(`Returning all ${allPrices.length} price points (not enough data to filter by day of week)`);
+        Logger.info(`Returning all ${allPrices.length} price points (not enough data to filter by day of week)`);
         return allPrices;
     } catch (error) {
         Logger.error(`Error getting weekly prices for ${symbol}`, error);
