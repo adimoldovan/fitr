@@ -1,6 +1,6 @@
-import {Logger} from '../utils/logger.js';
-import {getDataDir} from '../utils/storageUtils.js';
-import {CurrencyExchangeRate, CurrencyExchangeRates} from '../types.js';
+import {Logger} from '../utils/logger';
+import {getDataDir} from '../utils/storageUtils';
+import {CurrencyExchangeRate, CurrencyExchangeRates} from '../types';
 import fs from 'fs/promises';
 import path from 'path';
 

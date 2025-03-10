@@ -1,6 +1,6 @@
-import { getTransactions } from '../services/transactionService.js';
-import { getPortfolio } from '../services/portfolioService.js';
-import { Logger } from '../utils/logger.js';
+import { getTransactions } from '../services/transactionService';
+import { getPortfolio } from '../services/portfolioService';
+import { Logger } from '../utils/logger';
 import { format, parseISO } from 'date-fns';
 import { table } from 'table';
 

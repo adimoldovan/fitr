@@ -1,5 +1,5 @@
 import chalk from 'chalk';
-import {Config} from "../config.js";
+import {Config} from "../config";
 
 const LOGGING_LEVELS: Record<string, number> = {
     debug: 4,

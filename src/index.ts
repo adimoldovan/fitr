@@ -1,12 +1,12 @@
 #!/usr/bin/env node
 import {Command} from 'commander';
-import {displayPortfolio} from './commands/displayPortfolio.js';
-import {updateData} from './commands/updateData.js';
-import {interactiveAddTransaction} from './commands/interactiveTransaction.js';
-import {listTransactions} from './commands/listTransactions.js';
-import {initializeStorage} from './utils/storageUtils.js';
-import {Config} from './config.js';
-import {Logger} from './utils/logger.js';
+import {displayPortfolio} from './commands/displayPortfolio';
+import {updateData} from './commands/updateData';
+import {interactiveAddTransaction} from './commands/interactiveTransaction';
+import {listTransactions} from './commands/listTransactions';
+import {initializeStorage} from './utils/storageUtils';
+import {Config} from './config';
+import {Logger} from './utils/logger';
 
 const program = new Command();
 

@@ -1,9 +1,9 @@
 import fs from 'fs/promises';
 import { existsSync } from 'fs';
 import path from 'path';
-import { Transaction } from '../types.js';
-import { getDataDir } from '../utils/storageUtils.js';
-import { Logger } from "../utils/logger.js";
+import { Transaction } from '../types';
+import { getDataDir } from '../utils/storageUtils';
+import { Logger } from "../utils/logger";
 
 async function getTransactionsPath(symbol: string): Promise<string> {
     const dir = path.resolve(getDataDir(), 'transactions');

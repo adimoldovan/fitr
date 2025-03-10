@@ -1,9 +1,9 @@
 import inquirer from 'inquirer';
 import { format, parse, isValid } from 'date-fns';
-import { getPortfolio } from '../services/portfolioService.js';
-import { addTransaction } from './addTransaction.js';
-import { TransactionType } from '../types.js';
-import { Logger } from '../utils/logger.js';
+import { getPortfolio } from '../services/portfolioService';
+import { addTransaction } from './addTransaction';
+import { TransactionType } from '../types';
+import { Logger } from '../utils/logger';
 
 /**
  * Validates a date string in YYYY-MM-DD format

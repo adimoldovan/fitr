@@ -1,11 +1,11 @@
 import fs from 'fs/promises';
 import path from 'path';
-import {Portfolio, PricePoint, Transaction, TransactionType} from '../types.js';
-import {getDataDir} from '../utils/storageUtils.js';
-import {getTransactions} from './transactionService.js';
-import {getPriceHistory} from './priceHistoryService.js';
-import {formatNumber} from '../utils/formatUtils.js';
-import {Logger} from '../utils/logger.js';
+import {Portfolio, PricePoint, Transaction, TransactionType} from '../types';
+import {getDataDir} from '../utils/storageUtils';
+import {getTransactions} from './transactionService';
+import {getPriceHistory} from './priceHistoryService';
+import {formatNumber} from '../utils/formatUtils';
+import {Logger} from '../utils/logger';
 
 function getPortfolioPath(): string {
     return path.resolve(getDataDir('portfolioService'), 'portfolio.json');

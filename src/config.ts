@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from "path";
-import {getDataDir} from './utils/storageUtils.js';
-import {Logger} from "./utils/logger.js";
+import {getDataDir} from './utils/storageUtils';
+import {Logger} from "./utils/logger";
 
 interface ConfigData {
     mainCurrency: string;

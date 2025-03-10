@@ -1,15 +1,15 @@
 import {format, isToday, parseISO, startOfWeek, subWeeks} from 'date-fns';
-import {getPortfolio, updatePortfolio} from '../services/portfolioService.js';
-import {getTransactions} from '../services/transactionService.js';
-import {savePriceHistory, getPriceHistory} from '../services/priceHistoryService.js';
-import {fetchAndSaveCurrencyExchangeRate} from '../services/currencyService.js';
+import {getPortfolio, updatePortfolio} from '../services/portfolioService';
+import {getTransactions} from '../services/transactionService';
+import {savePriceHistory, getPriceHistory} from '../services/priceHistoryService';
+import {fetchAndSaveCurrencyExchangeRate} from '../services/currencyService';
 import {
     getHistoricalPrices,
     getWeeklyPrices
-} from '../services/yahooFinance.js';
-import {formatDate} from '../utils/dateUtils.js';
+} from '../services/yahooFinance';
+import {formatDate} from '../utils/dateUtils';
 import {PricePoint, Transaction} from "../types";
-import {Logger} from '../utils/logger.js';
+import {Logger} from '../utils/logger';
 
 /**
  * Update historical price data for a symbol
@@ -113,7 +113,7 @@ async function updateHistoricalPricesDataForSymbol(
  * @param newHistory New price history to merge
  * @returns Merged price history without duplicates
  */
-function mergePriceHistories(existingHistory: PricePoint[], newHistory: PricePoint[]): PricePoint[] {
+export function mergePriceHistories(existingHistory: PricePoint[], newHistory: PricePoint[]): PricePoint[] {
     // Create a map of existing prices by date for quick lookup
     const existingPricesByDate = new Map<string, PricePoint>();
     existingHistory.forEach(price => {

@@ -1,16 +1,13 @@
 import {
     getPortfolio
-} from '../services/portfolioService.js';
-
-import {getCurrencyExchangeRate} from '../services/currencyService.js';
-
+} from '../services/portfolioService';
+import {getCurrencyExchangeRate} from '../services/currencyService';
 import {
     formatNumber,
     getColoredFormatedNumber, highlight,
-} from '../utils/formatUtils.js';
-
-import {Logger} from '../utils/logger.js';
-import {Config} from "../config.js";
+} from '../utils/formatUtils';
+import {Logger} from '../utils/logger';
+import {Config} from "../config";
 
 function calculatePMT(rate: number, nper: number, pv: number, fv: number): string {
     //PMT(annualGrowthRate/12,noOfYears*12,currentValue,targetValue)

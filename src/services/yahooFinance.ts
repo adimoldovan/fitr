@@ -1,7 +1,7 @@
 import yahooFinance from 'yahoo-finance2';
 import { format, parse, startOfWeek, addDays, parseISO, isBefore, getDay, isEqual } from 'date-fns';
-import { PricePoint, PriceSource } from '../types.js';
-import { Logger } from '../utils/logger.js';
+import { PricePoint, PriceSource } from '../types';
+import { Logger } from '../utils/logger';
 
 /**
  * Get historical weekly price data for a symbol between two dates

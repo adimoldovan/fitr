@@ -1,9 +1,9 @@
 import fs from 'fs/promises';
 import { existsSync } from 'fs';
 import path from 'path';
-import { PricePoint } from '../types.js';
-import { getDataDir } from '../utils/storageUtils.js';
-import { Logger } from "../utils/logger.js";
+import { PricePoint } from '../types';
+import { getDataDir } from '../utils/storageUtils';
+import { Logger } from "../utils/logger";
 
 async function getPricesPath(symbol: string): Promise<string> {
     const dir = path.resolve(getDataDir(), 'prices');
