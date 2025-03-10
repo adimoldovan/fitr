@@ -95,7 +95,7 @@ function getStockMWR(transactions: Transaction[], currentValue: number, currentD
  * @param currentDate Current date
  * @returns The time-weighted return as a decimal (e.g., 0.1 for 10%)
  */
-function calculateTWR(transactions: Transaction[], currentPrice: number, currentDate: Date): number {
+export function calculateTWR(transactions: Transaction[], currentPrice: number, currentDate: Date): number {
     if (transactions.length === 0 || currentPrice <= 0) {
         return 0;
     }
