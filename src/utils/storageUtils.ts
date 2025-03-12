@@ -14,7 +14,7 @@ export function getDataDir(caller?: string): string {
     if (Config.getInstance().isDevMode()) {
         return path.resolve(rootDir, 'data');
     }
-    return path.resolve(os.homedir(), '.fi-tracker');
+    return path.resolve(os.homedir(), '.fitr');
 }
 
 export async function initializeStorage(): Promise<void> {

@@ -1,11 +1,11 @@
 {
-  "name": "fi-tracker",
+  "name": "fitr",
   "version": "0.1.0",
-  "description": "A tool for tracking investment portfolio performance.",
+  "description": "Financial Investment Tracker",
   "main": "dist/index.js",
   "type": "module",
   "bin": {
-    "fit": "./bin/run"
+    "fitr": "./bin/run"
   },
   "scripts": {
     "build": "webpack",
@@ -13,7 +13,7 @@
     "dev": "ts-node --esm src/index.ts",
     "test": "node --experimental-vm-modules node_modules/.bin/jest",
     "lint": "eslint .",
-    "r": "npm run build && fit -D -v"
+    "r": "npm run build && fitr -D -v"
   },
   "keywords": [
     "portfolio",

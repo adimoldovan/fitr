@@ -148,11 +148,11 @@ export async function displayPortfolio(annualGrowthRate: string, skipPrediction:
                 'Currency': asset.currency,
                 'Value': formatNumber(asset.currentValue),
                 'P&L': `${getColoredFormatedNumber(asset.profit)} ${getColoredFormatedNumber(asset.profitPercentage, '%')}`,
+                'MWR': getColoredFormatedNumber(asset.mwr * 100, '%'),
+                'TWR': getColoredFormatedNumber(asset.twr * 100, '%'),
                 'Current Price': formatNumber(asset.lastPrice),
                 'Quantity': formatNumber(asset.quantity, 2),
                 'Avg Price': formatNumber(asset.avgCost),
-                'MWR': getColoredFormatedNumber(asset.mwr * 100, '%'),
-                'TWR': getColoredFormatedNumber(asset.twr * 100, '%'),
                 'Updated': asset.lastUpdated,
             });
         }
