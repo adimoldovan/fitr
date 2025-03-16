@@ -20,23 +20,35 @@ A command-line tool for tracking your investment portfolio built with TypeScript
 
 ## Usage
 
-Run ```fit``` to run the program.
+Run `fitr` to start the program. The following commands are available:
 
-### Options
+### Main Commands
 
-- `--update`: Fetch the historical prices for all assets, calculates the latest values, and updates the portfolio summary.
-- `--dev-data`: Load the sample data for testing purposes.
-- `--debug`: Logs debug information to the console.
-- `--currency`: Displays the total value of the portfolio in the specified currency (e.g., USD, EUR). Can specify multiple currencies, comma separated (e.g., `--currency USD,EUR`). The currency conversion rates are fetched from `exchangerate-api.com` and require the API key to be set as `EXCHANGE_RATE_API_KEY` the environment variable.
-- `--help -h`: Display the help message.
+- `fitr`: Display your portfolio summary
+  - `-s, --sync`: Fetch and update historical price data for all assets and calculate portfolio performance
+  - `-g, --growth-rate <rate>`: Set the expected annual growth rate for portfolio predictions (default: 0.07)
+  - `-p, --skip-prediction`: Hide the prediction table
+  - `-v, --verbose`: Enable verbose logging mode
+  - `-D, --dev-data`: Use development data directory
+  - `--help, -h`: Display help information
+
+### Transaction Management
+
+- `fitr transaction add`: Add a new transaction
+  - `--help, -h`: Display help information
+
+- `fitr transaction list`: List transactions
+  - `-s, --symbol <symbol>`: Filter transactions by asset symbol
+  - `--help, -h`: Display help information
 
 ## Data Structure
 
 The portfolio tracker stores all data in JSON files:
 
-- `data/portfolio.json`: Contains the main portfolio summary with all assets and their latest values.
-- `data/prices/{SYMBOL}.json`: Historical prices for each asset containing.
-- `data/transactions/{SYMBOL}.json`: Transactions dta for each asset.
+- `data/portfolio.json`: Contains the main portfolio summary with all assets and their latest values
+- `data/prices/{SYMBOL}.json`: Historical prices for each asset
+- `data/transactions/{SYMBOL}.json`: Transactions data for each asset
+- `data/currency.json`: Currency exchange rates cache
 
 ## Uninstall
 
