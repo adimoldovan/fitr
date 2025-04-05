@@ -17,7 +17,7 @@ import {Logger} from '../utils/logger';
  * @param weekStartsOn The day of the week to consider as the first day (0 = Sunday, 1 = Monday, etc.)
  * @returns Promise that resolves when the update is complete
  */
-async function updateHistoricalPricesDataForSymbol(
+export async function updateHistoricalPricesDataForSymbol(
     symbol: string, 
     weekStartsOn: 0 | 1 | 2 | 3 | 4 | 5 | 6 = 1
 ): Promise<void> {

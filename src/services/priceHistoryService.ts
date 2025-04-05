@@ -4,6 +4,7 @@ import path from 'path';
 import { PricePoint } from '../types';
 import { getDataDir } from '../utils/storageUtils';
 import { Logger } from "../utils/logger";
+import { PriceSource } from '../types';
 
 async function getPricesPath(symbol: string): Promise<string> {
     const dir = path.resolve(getDataDir(), 'prices');
@@ -37,5 +38,21 @@ export async function savePriceHistory(symbol: string, priceHistory: PricePoint[
         await fs.writeFile(pricesPath, JSON.stringify({ symbol, priceHistory }, null, 2));
     } catch (error) {
         Logger.error(`Error saving price history for ${symbol}`, error);
+    }
+}
+
+export async function addPricePoint(symbol: string, price: number, date: string, source: PriceSource = PriceSource.MANUAL): Promise<void> {
+    try {
+        const priceHistory = await getPriceHistory(symbol);
+        const newPricePoint: PricePoint = {
+            price,
+            date,
+            source
+        };
+        priceHistory.push(newPricePoint);
+        Logger.info(`Adding new price point for ${symbol}: ${JSON.stringify(newPricePoint)}`);
+        await savePriceHistory(symbol, priceHistory);
+    } catch (error) {
+        Logger.error(`Error adding price point for ${symbol}`, error);
     }
 }

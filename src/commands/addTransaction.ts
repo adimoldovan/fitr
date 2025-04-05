@@ -1,8 +1,9 @@
 import { getTransactions, saveTransactions } from '../services/transactionService';
 import { getPortfolio, updatePortfolio } from '../services/portfolioService';
-import { Transaction, TransactionType } from '../types';
+import { PriceSource, Transaction, TransactionType } from '../types';
 import { Logger } from '../utils/logger';
 import { format, parse } from 'date-fns';
+import { addPricePoint } from '../services/priceHistoryService';
 
 export async function addTransaction(
     symbol: string,
@@ -75,11 +76,12 @@ export async function addTransaction(
         await saveTransactions(symbol, transactions);
         
         Logger.info(`Transaction added successfully for ${symbol}`);
+
+        // Update price history
+        await addPricePoint(symbol, newTransaction.price, newTransaction.date, PriceSource.TRANSACTION);
         
         // Update portfolio calculations
         await updatePortfolio();
-        
-        Logger.info(`Portfolio updated successfully`);
     } catch (error) {
         Logger.error('Error adding transaction', error);
     }

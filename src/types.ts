@@ -66,7 +66,8 @@ export interface PricePoint {
 
 export enum PriceSource {
     YAHOO = 'yahoo',
-    MANUAL = 'manual'
+    MANUAL = 'manual',
+    TRANSACTION = 'transaction'
 }
 
 export interface CurrencyExchangeRate {
