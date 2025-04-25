@@ -49,6 +49,9 @@ interface CommandOptions {
 async function setupCommand(options: CommandOptions): Promise<void> {
     Config.getInstance().setDevMode(!!options.devData);
     Config.getInstance().setDebugMode(!!options.verbose);
+    
+    await initializeStorage();
+    
     await Config.getInstance().loadConfigFromFile();
 
     if (options.verbose) {
@@ -59,8 +62,6 @@ async function setupCommand(options: CommandOptions): Promise<void> {
     if (Config.getInstance().isDevMode()) {
         Logger.info(`Running in dev data mode`);
     }
-
-    await initializeStorage();
 }
 
 // Main command

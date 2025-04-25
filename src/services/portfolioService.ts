@@ -16,6 +16,27 @@ export async function getPortfolio(): Promise<Portfolio> {
         const data = await fs.readFile(getPortfolioPath(), 'utf-8');
         return JSON.parse(data) as Portfolio;
     } catch (error) {
+        if ((error as NodeJS.ErrnoException).code === 'ENOENT') {
+            // File doesn't exist, create a default portfolio
+            const defaultPortfolio: Portfolio = {
+                assets: [],
+                currencies: [],
+                total: {
+                    eur: 0
+                }
+            };
+            
+            // Ensure the directory exists
+            await fs.mkdir(path.dirname(getPortfolioPath()), { recursive: true });
+            
+            // Save the default portfolio
+            await savePortfolio(defaultPortfolio);
+            Logger.info('Created new portfolio file with default structure');
+            
+            return defaultPortfolio;
+        }
+        
+        // If it's any other error, log and exit
         Logger.error('Error reading portfolio summary', error);
         process.exit(1);
     }
