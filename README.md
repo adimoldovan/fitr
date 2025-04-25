@@ -2,6 +2,11 @@
 
 A command-line tool for tracking your investment portfolio built with TypeScript and Node.js.
 
+## Requirements
+
+- Node.js 18 or higher
+- npm 8 or higher
+
 ## Features
 
 - Track positions in stocks, ETFs, crypto, and other assets
@@ -12,15 +17,34 @@ A command-line tool for tracking your investment portfolio built with TypeScript
 
 ## Installation
 
+### Option 1: Install from npm (Recommended)
+
 ```bash
-   npm install
-   npm run build
-   npm link
+npm install -g fitr
+```
+
+### Option 2: Local Development Setup
+
+```bash
+git clone https://github.com/adimoldovan/fitr.git
+cd fitr
+npm install
+npm run build
+npm link
 ```
 
 ## Usage
 
 Run `fitr` to start the program. The following commands are available:
+
+### Quick Start
+
+Here's a simple workflow to get started:
+
+1. Install the tool: `npm install -g fitr`
+2. Add your first transaction: `fitr transaction add`
+3. View your portfolio: `fitr`
+4. Sync latest prices: `fitr -s`
 
 ### Main Commands
 
@@ -43,15 +67,18 @@ Run `fitr` to start the program. The following commands are available:
 
 ## Data Structure
 
-The portfolio tracker stores all data in JSON files:
+The portfolio tracker stores all data in JSON files in your home directory or iCloud Drive for MacOS:
 
-- `data/portfolio.json`: Contains the main portfolio summary with all assets and their latest values
-- `data/prices/{SYMBOL}.json`: Historical prices for each asset
-- `data/transactions/{SYMBOL}.json`: Transactions data for each asset
-- `data/currency.json`: Currency exchange rates cache
+- `config.json`: Configuration file
+- `portfolio.json`: Contains the main portfolio summary with all assets and their latest values
+- `prices/{SYMBOL}.json`: Historical prices for each asset
+- `transactions/{SYMBOL}.json`: Transactions data for each asset
+- `currency.json`: Currency exchange rates cache
+
+When using the `-D, --dev-data` flag, data is stored in the `data/` directory of your current working directory instead.
 
 ## Uninstall
 
 ```bash
-   npm unlink -g fi-tracker
+npm uninstall -g fitr
 ```
