@@ -158,7 +158,8 @@ export async function displayPortfolio(annualGrowthRate: string, skipPrediction:
         }
 
         for (const type in assetsData) {
-            Logger.printTable(assetsData[type], true, `Assets - ${type}`);
+            const formattedType = type.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+            Logger.printTable(assetsData[type], true, `Assets - ${formattedType}`);
         }
         // endregion
 
