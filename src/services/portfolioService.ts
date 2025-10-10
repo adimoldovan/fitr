@@ -190,12 +190,12 @@ export function calculateTWR(transactions: Transaction[], currentPrice: number, 
             if (event.isTransaction && event.transaction) {
                 // Calculate value before transaction (using the price from this transaction)
                 const valueBeforeTransaction = previousHoldings * event.price;
-                
+
                 // Calculate holding period return if we had previous holdings
                 if (previousHoldings > 0 && previousValue > 0) {
                     // Calculate HPR: (End Value / Start Value) - 1
                     const hpr = valueBeforeTransaction / previousValue - 1;
-                    
+
                     // Sanity check: Ignore extreme values that might be due to data issues
                     if (hpr > -0.9 && hpr < 10) {  // Allow up to 1000% gain but not more
                         holdingPeriodReturns.push(hpr);
@@ -238,7 +238,7 @@ export function calculateTWR(transactions: Transaction[], currentPrice: number, 
     }
 
     // Calculate TWR by compounding the holding period returns
-    const twr = holdingPeriodReturns.reduce((acc, hpr) => (1 + acc) * (1 + hpr) - 1, 0);
+    const twr = holdingPeriodReturns.reduce((acc, hpr) => acc * (1 + hpr), 1) - 1;
     
     // Apply a sanity check to the final TWR value
     if (twr < -0.9 || twr > 10) {
