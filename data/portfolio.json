@@ -8,14 +8,14 @@
       "currency": "USD",
       "quantity": 19,
       "avgCost": 183.26315789473685,
-      "lastUpdated": "2025-03-10",
-      "lastPrice": 381.44000244140625,
+      "lastUpdated": "2025-10-06",
+      "lastPrice": 522.4000244140625,
       "totalCost": 3482,
-      "currentValue": 7247.360046386719,
-      "profit": 3765.3600463867188,
-      "profitPercentage": 108.13785314149106,
-      "mwr": 2.2432046814816426,
-      "twr": -0.08197351999661551
+      "currentValue": 9925.600463867188,
+      "profit": 6443.6004638671875,
+      "profitPercentage": 185.05457966304385,
+      "mwr": 1.4359374996834728,
+      "twr": 0.2572804438364922
     },
     {
       "symbol": "GOOGL",
@@ -23,36 +23,36 @@
       "name": "Alphabet Inc.",
       "type": "stock",
       "currency": "EUR",
-      "quantity": 340,
-      "avgCost": 88.60058823529411,
-      "lastUpdated": "2025-03-10",
-      "lastPrice": 165.80149841308594,
-      "totalCost": 30124.199999999997,
-      "currentValue": 56372.50946044922,
-      "profit": 26248.30946044922,
-      "profitPercentage": 87.13363163320263,
-      "mwr": 0.18463176418474858,
-      "twr": 2.307430648575423
+      "quantity": 350,
+      "avgCost": 97.48955844155843,
+      "lastUpdated": "2025-10-06",
+      "lastPrice": 241.52999877929688,
+      "totalCost": 34121.34545454545,
+      "currentValue": 84535.4995727539,
+      "profit": 50414.154118208455,
+      "profitPercentage": 147.74960789681452,
+      "mwr": 0.21980540604650256,
+      "twr": 3.8180729858227984
     }
   ],
   "currencies": [
     {
       "cost": 3482,
-      "value": 7247.360046386719,
-      "profit": 3765.3600463867188,
-      "profitPercentage": 108.13785314149106,
-      "lastUpdated": "2025-03-10T16:08:09.068Z",
+      "value": 9925.600463867188,
+      "profit": 6443.6004638671875,
+      "profitPercentage": 185.05457966304385,
+      "lastUpdated": "2025-10-10T10:06:34.905Z",
       "currency": "USD",
       "exchangeRate": {
         "eur": 1
       }
     },
     {
-      "cost": 30124.199999999997,
-      "value": 56372.50946044922,
-      "profit": 26248.30946044922,
-      "profitPercentage": 87.13363163320263,
-      "lastUpdated": "2025-03-10T16:08:09.068Z",
+      "cost": 34121.34545454545,
+      "value": 84535.4995727539,
+      "profit": 50414.154118208455,
+      "profitPercentage": 147.74960789681452,
+      "lastUpdated": "2025-10-10T10:06:34.905Z",
       "currency": "EUR",
       "exchangeRate": {
         "eur": 1

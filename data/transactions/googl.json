@@ -2,6 +2,14 @@
   "symbol": "GOOGL",
   "transactions": [
     {
+      "date": "2018-03-26",
+      "type": "buy",
+      "quantity": 200,
+      "price": 50.13,
+      "fees": 4.99,
+      "notes": "Long-term investment"
+    },
+    {
       "date": "2024-02-26",
       "type": "buy",
       "quantity": 50,
@@ -18,12 +26,20 @@
       "notes": "Long-term investment"
     },
     {
-      "date": "2018-03-26",
+      "date": "2025-09-08",
+      "type": "sell",
+      "quantity": 10,
+      "price": 235,
+      "fees": 0,
+      "notes": "Sell a few shares"
+    },
+    {
+      "date": "2025-10-06",
       "type": "buy",
-      "quantity": 200,
-      "price": 50.13,
+      "quantity": 20,
+      "price": 245.5,
       "fees": 4.99,
-      "notes": "Long-term investment"
+      "notes": "Buy some more shares"
     }
   ]
 }
