@@ -83,11 +83,6 @@ function calculateMWR(cashFlows: Array<{ amount: number, date: Date }>): number 
 }
 
 function getStockMWR(transactions: Transaction[], currentValue: number, currentDate: Date): number {
-    // Ignore vested stocks
-    if (transactions.some(t => t.type.toUpperCase() === TransactionType.VESTED.toUpperCase())) {
-        return 0;
-    }
-
     // Convert transactions to cash flows
     const cashFlows = [
         ...transactions.map(t => ({
@@ -123,9 +118,8 @@ export function calculateTWR(transactions: Transaction[], currentPrice: number, 
 
     // Filter out non-buy/sell transactions as they don't affect holdings
     const relevantTransactions = transactions.filter(
-        t => t.type === TransactionType.BUY || 
-             t.type === TransactionType.SELL || 
-             t.type === TransactionType.VESTED
+        t => t.type === TransactionType.BUY ||
+             t.type === TransactionType.SELL
     );
 
     if (relevantTransactions.length === 0) {
@@ -155,7 +149,7 @@ export function calculateTWR(transactions: Transaction[], currentPrice: number, 
         // Get transaction date
         const transactionDate = new Date(transaction.date);
         
-        if (transaction.type === TransactionType.BUY || transaction.type === TransactionType.VESTED) {
+        if (transaction.type === TransactionType.BUY) {
             currentHoldings += transaction.quantity;
         } else if (transaction.type === TransactionType.SELL) {
             currentHoldings -= transaction.quantity;
@@ -268,7 +262,7 @@ export async function updatePortfolio(): Promise<void> {
                 let totalCost = 0;
 
                 for (const transaction of transactions) {
-                    if (transaction.type.toUpperCase() === TransactionType.BUY.toUpperCase() || transaction.type.toUpperCase() === TransactionType.VESTED.toUpperCase()) {
+                    if (transaction.type.toUpperCase() === TransactionType.BUY.toUpperCase()) {
                         totalQuantity += transaction.quantity;
                         totalCost += transaction.quantity * transaction.price;
                     } else if (transaction.type.toUpperCase() === TransactionType.SELL.toUpperCase()) {

@@ -55,8 +55,7 @@ export enum TransactionType {
     BUY = 'buy',
     SELL = 'sell',
     DIVIDEND = 'dividend',
-    SPLIT = 'split',
-    VESTED = 'vested'
+    SPLIT = 'split'
 }
 
 export interface PricePoint {

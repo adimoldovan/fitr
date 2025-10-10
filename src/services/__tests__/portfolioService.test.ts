@@ -230,27 +230,6 @@ describe('calculateTWR', () => {
     expect(result).toBeCloseTo(0.28, 2);
   });
   
-  test('should handle vested stock transactions correctly', () => {
-    const transactions: Transaction[] = [
-      {
-        date: '2023-01-01',
-        type: TransactionType.VESTED,
-        quantity: 10,
-        price: 150,
-        fees: 0,
-        notes: ''
-      }
-    ];
-    
-    // Price increased by 10%
-    const currentPrice = 165;
-    
-    const result = calculateTWR(transactions, currentPrice, new Date());
-    
-    // Expected return is 10%
-    expect(result).toBeCloseTo(0.1, 5);
-  });
-  
   test('should handle transactions with extreme price changes within reasonable limits', () => {
     const transactions: Transaction[] = [
       {

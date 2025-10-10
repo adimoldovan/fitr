@@ -44,13 +44,13 @@ export function sortTransactionsByDate(transactions: Transaction[]): Transaction
  * @param transactions List of transactions
  * @returns Object containing total quantity, cost, and fees
  */
-export function calculateTransactionStats(transactions: Transaction[]): { 
-    totalQuantity: number; 
-    totalCost: number; 
-    totalFees: number; 
+export function calculateTransactionStats(transactions: Transaction[]): {
+    totalQuantity: number;
+    totalCost: number;
+    totalFees: number;
 } {
     const totalQuantity = transactions.reduce((sum, t) => {
-        if (t.type === 'buy' || t.type === 'vested') {
+        if (t.type === 'buy') {
             return sum + t.quantity;
         } else if (t.type === 'sell') {
             return sum - t.quantity;
@@ -59,7 +59,7 @@ export function calculateTransactionStats(transactions: Transaction[]): {
     }, 0);
 
     const totalCost = transactions.reduce((sum, t) => {
-        if (t.type === 'buy' || t.type === 'vested') {
+        if (t.type === 'buy') {
             return sum + (t.quantity * t.price);
         } else if (t.type === 'sell') {
             return sum - (t.quantity * t.price);
